@@ -677,7 +677,6 @@ function init() {
   buildCityChart();
   buildCitySelect();
   updateCityList();
-  setTimeout(buildMap, 200);
 }
 
 // ── MOST VISITED LIST ──
@@ -1052,6 +1051,17 @@ if (document.readyState === 'complete') {
 } else {
   window.addEventListener('load', init);
 }
+
+// Bulletproof map trigger — fires as soon as container has real dimensions
+const _mapObserver = new ResizeObserver(entries => {
+  for (const entry of entries) {
+    if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+      buildMap();
+      _mapObserver.disconnect();
+    }
+  }
+});
+_mapObserver.observe(document.getElementById('map-container'));
 </script>
 </body>
 </html>
