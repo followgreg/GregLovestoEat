@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greg Eats & Drinks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0e0c;
+  --surface: #1a1916;
+  --surface2: #222018;
+  --border: rgba(255,255,255,0.07);
+  --accent: #c8a96e;
+  --accent2: #a8893e;
+  --teal: #5DCAA5;
+  --muted: #6b6860;
+  --text: #e8e4dc;
+  --text2: #b0a898;
+  --red: #d4635a;
+  --green: #5DCAA5;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+.header {
+  padding: 36px 32px 28px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15,14,12,0.96);
+  backdrop-filter: blur(12px);
+}
+.header-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.title-block h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  line-height: 1;
+}
+.title-block p {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.title-block a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(200,169,110,0.3);
+}
+
+.stats-row {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 14px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ── TAB PANELS ── */
+.tab-panel { display: none; padding: 28px 32px 60px; }
+.tab-panel.active { display: block; }
+
+/* ── SEARCH / FILTER BAR ── */
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.search-wrap {
+  flex: 1;
+  min-width: 180px;
+  position: relative;
+}
+.search-wrap input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px 10px 36px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-wrap input:focus { border-color: rgba(200,169,110,0.4); }
+.search-wrap::before {
+  content: '⌕';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 16px;
+  pointer-events: none;
+}
+.filter-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+.filter-btn:hover { border-color: rgba(200,169,110,0.3); color: var(--text); }
+.filter-btn.active {
+  background: rgba(200,169,110,0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.results-count {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding: 8px 0;
+}
+
+/* ── VENUE LIST ── */
+.venue-list { display: flex; flex-direction: column; gap: 2px; }
+.venue-row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 0 16px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  position: relative;
+}
+.venue-row:hover {
+  background: var(--surface2);
+  border-color: var(--border);
+}
+.venue-row.hidden { display: none; }
+.venue-rank {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: right;
+  line-height: 1;
+}
+.venue-rank.top10 { color: var(--accent); }
+.venue-info { min-width: 0; }
+.venue-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.venue-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+.venue-city {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+}
+.venue-dates {
+  font-size: 12px;
+  color: var(--muted);
+}
+.venue-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.visit-badge {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+.visit-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.visit-bar-wrap {
+  width: 80px;
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.visit-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.has-shout::after {
+  content: '💬';
+  position: absolute;
+  top: 10px;
+  right: 120px;
+  font-size: 11px;
+  opacity: 0.5;
+}
+
+/* ── MAP TAB ── */
+#map-container {
+  width: 100%;
+  height: 600px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+#map-svg {
+  width: 100%;
+  height: 100%;
+}
+.map-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.map-filter-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.map-filter-btn:hover, .map-filter-btn.active {
+  background: rgba(200,169,110,0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.map-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--muted);
+  align-items: center;
+}
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  display: inline-block; margin-right: 5px; vertical-align: middle;
+}
+
+/* ── CHART TAB ── */
+.chart-section { margin-bottom: 40px; }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+.bar-chart { display: flex; flex-direction: column; gap: 10px; }
+.bar-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 48px;
+  align-items: center;
+  gap: 12px;
+}
+.bar-label {
+  font-size: 13px;
+  color: var(--text2);
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bar-track {
+  height: 20px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+}
+.bar-fill.accent { background: linear-gradient(90deg, var(--accent2), var(--accent)); }
+.bar-fill.teal { background: linear-gradient(90deg, #3a9e82, var(--teal)); }
+.bar-fill.red { background: linear-gradient(90deg, #b04840, var(--red)); }
+.bar-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  color: var(--accent);
+  text-align: right;
+}
+
+/* ── DETAIL OVERLAY ── */
+.detail-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  display: flex; align-items: flex-end; justify-content: center;
+  pointer-events: none; opacity: 0;
+  transition: opacity 0.25s;
+}
+.detail-overlay.open { opacity: 1; pointer-events: all; }
+.detail-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+.detail-panel {
+  position: relative; z-index: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+  width: 100%; max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 28px 28px 40px;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.detail-overlay.open .detail-panel { transform: translateY(0); }
+.detail-handle {
+  width: 40px; height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 20px;
+}
+.detail-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.detail-city {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.detail-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.detail-stat {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 12px 14px;
+  text-align: center;
+}
+.detail-stat-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+.detail-stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+.detail-shouts { margin-top: 16px; }
+.detail-shouts h4 {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.shout-item {
+  background: rgba(255,255,255,0.03);
+  border-left: 2px solid var(--accent);
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--text2);
+  font-style: italic;
+  border-radius: 0 4px 4px 0;
+  line-height: 1.5;
+}
+.detail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 18px;
+  color: var(--accent);
+  font-size: 13px;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(200,169,110,0.3);
+  padding-bottom: 1px;
+  transition: border-color 0.2s;
+}
+.detail-link:hover { border-color: var(--accent); }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  font-size: 14px;
+  display: none;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 600px) {
+  .header { padding: 20px 16px 16px; }
+  .tabs { padding: 0 16px; }
+  .tab-panel { padding: 20px 16px 48px; }
+  .bar-row { grid-template-columns: 90px 1fr 40px; }
+  .venue-row { grid-template-columns: 36px 1fr auto; gap: 0 10px; padding: 12px 10px; }
+  .has-shout::after { right: 90px; }
+  .detail-panel { padding: 20px 18px 32px; }
+  .detail-stats { grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .stats-row { gap: 16px; }
+  .stat-value { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="title-block">
+      <h1>Greg ❤️ to Eat</h1>
+      <p>14,001 check-ins · 2009–2026 · <a href="https://www.swarmapp.com/" target="_blank">Swarm ↗</a></p>
+    </div>
+    <div class="stats-row">
+      <div class="stat">
+        <span class="stat-value">14,001</span>
+        <span class="stat-label">Total Check-ins</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="stat-venues">—</span>
+        <span class="stat-label">Venues</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="stat-cities">—</span>
+        <span class="stat-label">Cities</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('map')">Map</button>
+  <button class="tab-btn" onclick="switchTab('history')">By Year</button>
+  <button class="tab-btn" onclick="switchTab('cities')">By City</button>
+  <button class="tab-btn" onclick="switchTab('most')">Most Visited</button>
+</div>
+
+<!-- ── TAB: MOST VISITED ── -->
+<div id="tab-most" class="tab-panel">
+  <div class="controls">
+    <div class="search-wrap">
+      <input type="text" id="search-most" placeholder="Search venues…" oninput="filterMost()">
+    </div>
+    <div class="filter-btns">
+      <button class="filter-btn active" id="fbtn-all" onclick="setFilter('all')">All Cities</button>
+      <button class="filter-btn" id="fbtn-raleigh" onclick="setFilter('raleigh')">Raleigh</button>
+      <button class="filter-btn" id="fbtn-travel" onclick="setFilter('travel')">Travel</button>
+      <button class="filter-btn" id="fbtn-repeat" onclick="setFilter('repeat')">10+ visits</button>
+    </div>
+    <span class="results-count" id="most-count"></span>
+  </div>
+  <div class="venue-list" id="venue-list"></div>
+  <div class="empty-state" id="most-empty">No venues match your search.</div>
+</div>
+
+<!-- ── TAB: MAP ── -->
+<div id="tab-map" class="tab-panel active">
+  <div class="map-controls">
+    <button class="map-filter-btn active" id="mfbtn-all" onclick="setMapFilter('all')">All</button>
+    <button class="map-filter-btn" id="mfbtn-raleigh" onclick="setMapFilter('raleigh')">Raleigh Focus</button>
+    <button class="map-filter-btn" id="mfbtn-us" onclick="setMapFilter('us')">US Only</button>
+    <button class="map-filter-btn" id="mfbtn-intl" onclick="setMapFilter('intl')">Non-US</button>
+    <button class="map-filter-btn" id="mfbtn-pizza" onclick="setMapFilter('pizza')">🍕 Pizza</button>
+    <button class="map-filter-btn" id="mfbtn-sushi" onclick="setMapFilter('sushi')">🍣 Sushi</button>
+    <button class="map-filter-btn" id="mfbtn-burgers" onclick="setMapFilter('burgers')">🍔 Burgers</button>
+  </div>
+  <div id="map-container">
+    <canvas id="map-canvas" style="width:100%;height:100%;"></canvas>
+  </div>
+  <div class="map-legend">
+    <span><span class="legend-dot" style="background:var(--accent);"></span>1–9 visits</span>
+    <span><span class="legend-dot" style="background:#e8a840;width:14px;height:14px;"></span>10–29 visits</span>
+    <span><span class="legend-dot" style="background:var(--teal);width:18px;height:18px;"></span>30+ visits</span>
+    <span style="margin-left:8px;">Click bubble for details</span>
+  </div>
+</div>
+
+<!-- ── TAB: BY YEAR ── -->
+<div id="tab-history" class="tab-panel">
+  <div class="chart-section">
+    <div class="section-title">Check-ins Per Year</div>
+    <div class="bar-chart" id="year-chart"></div>
+  </div>
+  <div class="chart-section">
+    <div class="section-title">Your Streaks & Eras</div>
+    <div id="era-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+  </div>
+</div>
+
+<!-- ── TAB: BY CITY ── -->
+<div id="tab-cities" class="tab-panel">
+  <div class="chart-section">
+    <div class="section-title">Check-ins by City</div>
+    <div class="bar-chart" id="city-chart"></div>
+  </div>
+  <div class="chart-section">
+    <div class="section-title" id="city-list-title">Top Venues in Raleigh / Triangle</div>
+    <div class="controls" style="margin-bottom:16px;">
+      <select id="city-select" onchange="updateCityList()" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;cursor:pointer;">
+      </select>
+    </div>
+    <div class="venue-list" id="city-venue-list"></div>
+  </div>
+</div>
+
+<!-- ── DETAIL OVERLAY ── -->
+<div class="detail-overlay" id="detail-overlay">
+  <div class="detail-backdrop" onclick="closeDetail()"></div>
+  <div class="detail-panel">
+    <div class="detail-handle"></div>
+    <div class="detail-name" id="dp-name"></div>
+    <div class="detail-city" id="dp-city"></div>
+    <div class="detail-stats">
+      <div class="detail-stat">
+        <div class="detail-stat-val" id="dp-visits"></div>
+        <div class="detail-stat-label">Visits</div>
+      </div>
+      <div class="detail-stat">
+        <div class="detail-stat-val" id="dp-first"></div>
+        <div class="detail-stat-label">First Visit</div>
+      </div>
+      <div class="detail-stat">
+        <div class="detail-stat-val" id="dp-last"></div>
+        <div class="detail-stat-label">Last Visit</div>
+      </div>
+    </div>
+    <div class="detail-shouts" id="dp-shouts-section" style="display:none;">
+      <h4>Your Check-in Notes</h4>
+      <div id="dp-shouts"></div>
+    </div>
+    <a id="dp-link" href="#" target="_blank" class="detail-link">View on Foursquare ↗</a>
+  </div>
+</div>
+
+<script>
+const VENUES = [{"name":"Click Cafe","count":557,"lat":35.78119,"lng":-78.650492,"city":"Raleigh / Triangle","first":"2012-03-02","last":"2015-03-18","url":"https://app.foursquare.com/v/click-cafe/4f510392e4b049c0d7eec725","shouts":["Great view of the Raleigh Christmas Parade from our balcony!","Getting ready for this morning's @triangleama Digital Marketing SIG"]},{"name":"Starbucks","count":195,"lat":39.936639,"lng":-75.045066,"city":"Philadelphia","first":"2009-10-16","last":"2025-05-31","url":"https://app.foursquare.com/v/starbucks/4ad63306f964a520b30521e3","shouts":["Much needed this morning.","Getting some caffeinated blog time in this Sunday morning.","Breakfast with my honey before I fly back out again.","Breakfast with Evelyn","Original Starbucks!"]},{"name":"Target","count":195,"lat":35.902952,"lng":-78.956204,"city":"Raleigh / Triangle","first":"2009-10-25","last":"2019-10-12","url":"https://app.foursquare.com/v/target/4ae0cc32f964a5209e8221e3","shouts":["New Target smell!","Doing a craigslist transaction always feels like a drug deal to me.","Restocking the @freezerburns review queu","Last minute stocking stuffers.","First time at new Target."]},{"name":"Smoothie King","count":106,"lat":27.39032,"lng":-82.507984,"city":"Tampa","first":"2010-02-03","last":"2023-06-07","url":"https://app.foursquare.com/v/smoothie-king/4b451dabf964a520330526e3","shouts":[]},{"name":"Dunkin'","count":84,"lat":35.823194,"lng":-78.902653,"city":"Raleigh / Triangle","first":"2009-10-15","last":"2024-11-23","url":"https://app.foursquare.com/v/dunkin/4b4b3d19f964a5203f9526e3","shouts":["The worst Dunkin of all time","Up early to get my boy his requested birthday breakfast.","Celebrating a great Sox win last night","Birthday boy requested a slice of New England for breakfast.","Breakfast time while mommy sleeps in!"]},{"name":"Harris Teeter","count":82,"lat":35.821008,"lng":-78.901044,"city":"Raleigh / Triangle","first":"2009-10-25","last":"2019-02-01","url":"https://app.foursquare.com/v/harris-teeter/4ada6029f964a520052221e3","shouts":["Grocery shopping at 6 am. Feeling super productive today!"]},{"name":"La Rancherita","count":60,"lat":35.881869,"lng":-78.645822,"city":"Raleigh / Triangle","first":"2012-08-06","last":"2022-10-19","url":"https://app.foursquare.com/v/la-rancherita/4e8c7ddcd3e303e9db811e1d","shouts":["Getting my nom on.","Getting my burrito on","Going to \"Feast\"erita"]},{"name":"La Farm Bakery Bistro","count":59,"lat":35.828888,"lng":-78.899232,"city":"Raleigh / Triangle","first":"2019-04-30","last":"2025-07-18","url":"https://app.foursquare.com/v/la-farm-bakery-bistro/59f793a93fcee8127c9c04fd","shouts":[]},{"name":"Kai Sushi & Sake Bar","count":49,"lat":35.885344,"lng":-78.660404,"city":"Raleigh / Triangle","first":"2016-06-03","last":"2019-07-25","url":"https://app.foursquare.com/v/kai-sushi--sake-bar/519f024f498eca59d7057f3f","shouts":[]},{"name":"Panera Bread","count":47,"lat":38.704549,"lng":-77.220377,"city":"Other","first":"2009-12-05","last":"2024-06-02","url":"https://app.foursquare.com/v/panera-bread/4bba2d06935e952159d52790","shouts":[]},{"name":"Dairy Queen","count":45,"lat":26.446197,"lng":-82.041754,"city":"Other","first":"2010-01-17","last":"2019-06-21","url":"https://app.foursquare.com/v/dairy-queen/4b5348fef964a520d99527e3","shouts":["Pre-carding team ice cream party! Go Strikers!","Blizzard time!","I feel like we're here all the time! (Not complaining)","Dinner with my boys=cherished memories","2nd time here today. First time was Grill. This time it's Chill"]},{"name":"Simmer Coffee House","count":43,"lat":35.830747,"lng":-78.908405,"city":"Raleigh / Triangle","first":"2025-08-23","last":"2026-03-20","url":"https://app.foursquare.com/v/simmer-coffee-house/68a4b0702159d13ab0f0a588","shouts":[]},{"name":"Moonlight Pizza Company","count":42,"lat":35.779921,"lng":-78.649157,"city":"Raleigh / Triangle","first":"2011-12-09","last":"2015-10-21","url":"https://app.foursquare.com/v/moonlight-pizza-company/4ae9c946f964a52069b621e3","shouts":["Lunch with the fam!","Love the turkey chili"]},{"name":"Noodles & Company","count":39,"lat":35.744112,"lng":-78.873282,"city":"Raleigh / Triangle","first":"2010-01-24","last":"2024-07-13","url":"https://app.foursquare.com/v/noodles--company/4ade3b97f964a520227421e3","shouts":["Evelyn","Lunchtime!"]},{"name":"PDQ","count":39,"lat":35.791227,"lng":-78.845771,"city":"Raleigh / Triangle","first":"2013-08-28","last":"2022-06-03","url":"https://app.foursquare.com/v/pdq/520422fb2fc627a979e80a6c","shouts":["Alston Ridge PTA Fun Night!","Rapids team lunch!"]},{"name":"Stone Theaters Park West 14","count":39,"lat":35.807403,"lng":-78.820232,"city":"Raleigh / Triangle","first":"2013-02-27","last":"2019-09-19","url":"https://app.foursquare.com/v/stone-theaters-park-west-14/51031745e4b0a221c47baca4","shouts":["Trolls","Star Wars for the 3rd time!","Straight outta Cary","Jurassic World 3D with the boys!","American Sniper."]},{"name":"David's Dumpling & Noodle Bar","count":36,"lat":35.785798,"lng":-78.66149,"city":"Raleigh / Triangle","first":"2012-02-25","last":"2023-04-20","url":"https://app.foursquare.com/v/davids-dumpling--noodle-bar/4c55e2ef728920a1a7c33085","shouts":["Team lunch!","Celebrating 5 years at @brooksbellinc and working with @robbcz","Yummy dumplings","Super psyched to try this."]},{"name":"Sushi O Bistro","count":36,"lat":35.78287,"lng":-78.647307,"city":"Raleigh / Triangle","first":"2012-02-10","last":"2020-03-06","url":"https://app.foursquare.com/v/sushi-o-bistro/4ca607d2a6e08cfa407b7694","shouts":["Team lunch!","Sushi again?! Hell yeah!"]},{"name":"Stromboli's","count":36,"lat":35.826856,"lng":-78.703926,"city":"Raleigh / Triangle","first":"2009-11-25","last":"2013-08-30","url":"https://app.foursquare.com/v/strombolis/4b08a193f964a520dd0f23e3","shouts":["Planning lunch for #FoodBank24 with @charityjen!","The mayor is in!"]},{"name":"Sean's Shack","count":35,"lat":35.848971,"lng":-78.584163,"city":"Raleigh / Triangle","first":"2009-11-21","last":"2020-02-22","url":"https://app.foursquare.com/v/seans-shack/4b51f4a9f964a520585d27e3","shouts":["Angels we have heard on high!","A Christmas Eve tradition!","And on the sixth day, he feasted.","Huzzah!","Happy Mother's Day!"]},{"name":"Caf\u00e9 Helios","count":35,"lat":35.785535,"lng":-78.647839,"city":"Raleigh / Triangle","first":"2009-10-22","last":"2014-11-10","url":"https://app.foursquare.com/v/caf%C3%A9-helios/4ad4d1cff964a52003fc20e3","shouts":["Breakfast with @brooksbell and @robbcz","Weekly breakfast meeting with @brooksbell and @robbcz","Weekly breakfast with @brooksbell and @robbcz","Breakfast!","Weekly breakfast with @robbcz @brooksbell"]},{"name":"First Watch","count":33,"lat":35.79242,"lng":-78.845306,"city":"Raleigh / Triangle","first":"2016-12-30","last":"2026-02-20","url":"https://app.foursquare.com/v/first-watch/4b603d39f964a5206bdb29e3","shouts":[]},{"name":"Chili's Grill & Bar","count":32,"lat":35.807009,"lng":-78.812954,"city":"Raleigh / Triangle","first":"2010-02-27","last":"2024-08-23","url":"https://app.foursquare.com/v/chilis-grill--bar/4ad8a240f964a520181321e3","shouts":[]},{"name":"Chuy's","count":29,"lat":35.846545,"lng":-78.888742,"city":"Raleigh / Triangle","first":"2014-02-24","last":"2026-02-18","url":"https://app.foursquare.com/v/chuys/523b837c498ea178a81d9675","shouts":["Celebrating Gavin's birthday with tacos!","Yay birthday dinner!"]},{"name":"Tribeca Tavern","count":28,"lat":35.791909,"lng":-78.847833,"city":"Raleigh / Triangle","first":"2010-05-28","last":"2026-02-09","url":"https://app.foursquare.com/v/tribeca-tavern/4b807db9f964a520327730e3","shouts":["Yay date night !","Dessert time!","About to fill my belly","Dessert time!","Twice in one week!"]},{"name":"Five Guys","count":28,"lat":36.814482,"lng":-76.167638,"city":"Other","first":"2010-02-13","last":"2023-03-12","url":"https://app.foursquare.com/v/five-guys/4b042ba6f964a520c25122e3","shouts":["It's Five Gee","The Fries bite you back!","Haven't had a burger in almost 6 months. Of course my first one back will be one with strength.","Burger with Strength!","Bacon cheeseburger with extra bacon ftw"]},{"name":"Brixx Wood Fired Pizza","count":27,"lat":35.84762,"lng":-78.889665,"city":"Raleigh / Triangle","first":"2011-07-19","last":"2025-12-27","url":"https://app.foursquare.com/v/brixx-wood-fired-pizza/4adfe723f964a520ea7d21e3","shouts":["Pizza night!"]},{"name":"Lucettegrace","count":27,"lat":35.777804,"lng":-78.64068,"city":"Raleigh / Triangle","first":"2022-06-15","last":"2025-08-14","url":"https://app.foursquare.com/v/lucettegrace/53440139498e597e9d3addff","shouts":[]},{"name":"Chipotle Mexican Grill","count":26,"lat":39.840445,"lng":-75.091841,"city":"Philadelphia","first":"2010-02-05","last":"2024-05-10","url":"https://app.foursquare.com/v/chipotle-mexican-grill/4b00636cf964a5209d3d22e3","shouts":["Yay for chipotle!","Lunch!","Pre-movie Chipotle-ing with the peeps Josh, Walter","Team WeFit @vitalplan walking trip!","#4HB approved!"]},{"name":"MOD Pizza","count":26,"lat":35.823701,"lng":-78.903244,"city":"Raleigh / Triangle","first":"2016-07-13","last":"2022-07-09","url":"https://app.foursquare.com/v/mod-pizza/556d196b498e8c76199e013c","shouts":["Opening Day!!"]},{"name":"Steak 'n Shake","count":26,"lat":35.85852,"lng":-78.712304,"city":"Raleigh / Triangle","first":"2011-08-23","last":"2019-11-16","url":"https://app.foursquare.com/v/steak-n-shake/4b818125f964a520e0aa30e3","shouts":["Because of course we did.","Righteous!!!","Leave it up to us to find a Steak N Shake in California! Woot!","Hello beautiful.","No Ng Family trip is complete without a stop at our favorite!"]},{"name":"Sola Coffee Cafe","count":26,"lat":35.884611,"lng":-78.665672,"city":"Raleigh / Triangle","first":"2016-04-22","last":"2019-08-30","url":"https://app.foursquare.com/v/sola-coffee-cafe/4f4cdb257beb1fbf470b672a","shouts":[]},{"name":"Fenway Park","count":25,"lat":42.347928,"lng":-71.088975,"city":"Boston","first":"2013-10-01","last":"2025-09-18","url":"https://app.foursquare.com/v/fenway-park/40eb3d00f964a520250a1fe3","shouts":["Had to come."]},{"name":"Red Robin","count":25,"lat":35.746222,"lng":-78.883718,"city":"Raleigh / Triangle","first":"2009-10-16","last":"2017-10-10","url":"https://app.foursquare.com/v/red-robin/4c51b2db991c20a1783e4088","shouts":["Yummmmm"]},{"name":"The Umstead Hotel and Spa","count":24,"lat":35.830251,"lng":-78.765362,"city":"Raleigh / Triangle","first":"2012-08-16","last":"2024-11-21","url":"https://app.foursquare.com/v/the-umstead-hotel-and-spa/4bc3c763dce4eee1bcbf719d","shouts":["#click2014 day 2! A great event so far!","Whoops. I meant to check into the hotel lol. The bar is for later!"]},{"name":"Chopt","count":24,"lat":35.865478,"lng":-78.619971,"city":"Raleigh / Triangle","first":"2018-01-30","last":"2019-08-14","url":"https://app.foursquare.com/v/chopt/5a19b9eaa87921069bd06634","shouts":[]},{"name":"Irregardless","count":23,"lat":35.781095,"lng":-78.655961,"city":"Raleigh / Triangle","first":"2012-01-24","last":"2020-02-11","url":"https://app.foursquare.com/v/irregardless/4b2d8eeaf964a520dbd824e3","shouts":["Exec lunch!","Food Bank power lunch with @charityjen @foodbankjenc @trianglefoodguy"]},{"name":"Barnes & Noble","count":23,"lat":35.904905,"lng":-78.943997,"city":"Raleigh / Triangle","first":"2009-10-17","last":"2020-02-01","url":"https://app.foursquare.com/v/barnes--noble/4adf4a40f964a520227921e3","shouts":["Getting a hard copy."]},{"name":"Armadillo Grill","count":22,"lat":35.786058,"lng":-78.647478,"city":"Raleigh / Triangle","first":"2009-10-19","last":"2015-02-10","url":"https://app.foursquare.com/v/armadillo-grill/4ad4fd27f964a520220121e3","shouts":["Team lunch on a gorgeous Raleigh Monday!"]},{"name":"Food Lion","count":22,"lat":35.822141,"lng":-78.849089,"city":"Raleigh / Triangle","first":"2011-07-10","last":"2014-08-16","url":"https://app.foursquare.com/v/food-lion/5058fbb3c593f3e03f13fea8","shouts":["Prepping for the FNS Food Stamp Challenge next week.","Buying my week's food for the Food Stamp Challenge. $20.75 for 5 days of meals. Thank you Food Lion for all you do for @Foodbankcenc","Need more BBQ supplies mid-party"]},{"name":"Two Guys Grille","count":21,"lat":35.836261,"lng":-78.858399,"city":"Raleigh / Triangle","first":"2010-03-19","last":"2025-06-01","url":"https://app.foursquare.com/v/two-guys-grille/4b8d98d9f964a520510333e3","shouts":["The best cheesesteak in the Triangle!"]},{"name":"Chick-fil-A","count":21,"lat":36.001289,"lng":-79.906526,"city":"Other","first":"2009-11-16","last":"2024-11-02","url":"https://app.foursquare.com/v/chickfila/4ad7a5b6f964a5203a0d21e3","shouts":[]},{"name":"Brasa Brazilian Steakhouse","count":21,"lat":35.905486,"lng":-78.78365,"city":"Raleigh / Triangle","first":"2011-04-12","last":"2022-06-16","url":"https://app.foursquare.com/v/brasa-brazilian-steakhouse/4afd90fbf964a520a22822e3","shouts":["Meat Up! Meat Up! Meat Up!","And on the first day of May there was meat on swords.","Meat Up!","Meat Up! Meat Up!","I'm so happy right now"]},{"name":"Paragon Parkside","count":20,"lat":35.849447,"lng":-78.889969,"city":"Raleigh / Triangle","first":"2022-05-26","last":"2024-12-27","url":"https://app.foursquare.com/v/paragon-parkside/62900ff3ff9d065f2ebaffe7","shouts":["Elvis!","First movie since January 2020!"]},{"name":"The Cheesecake Factory","count":20,"lat":35.839935,"lng":-78.678373,"city":"Raleigh / Triangle","first":"2009-11-08","last":"2023-09-11","url":"https://app.foursquare.com/v/the-cheesecake-factory/4b8ab538f964a520417b32e3","shouts":["Made it to my neice's birthday!","Yay date night! (And hooray for pumpkin cheesecake)","A team lunch/field trip to talk about consumer buying psychology"]},{"name":"Natty Greene's Pub & Brewing","count":20,"lat":35.782798,"lng":-78.646725,"city":"Raleigh / Triangle","first":"2012-02-01","last":"2015-05-15","url":"https://app.foursquare.com/v/natty-greenes-pub--brewing/4b9042bdf964a520967f33e3","shouts":["Lunch with the @brooksbellinc crew."]},{"name":"Boylan Bridge Brewpub","count":20,"lat":35.778655,"lng":-78.649395,"city":"Raleigh / Triangle","first":"2011-06-30","last":"2015-03-02","url":"https://app.foursquare.com/v/boylan-bridge-brewpub/4ad9fca0f964a520cf1c21e3","shouts":["Best pickle chips to view of the city ratio in the city?","Sales team lunch!","Goodbye lunch for @rachealy.","A gorgeous @brooksbellinc lunch at the Boylan patio","Chillin with the @brooksbellinc crew."]},{"name":"Detroit Metropolitan Wayne County Airport (DTW)","count":19,"lat":42.200803,"lng":-83.35949,"city":"Other","first":"2014-06-17","last":"2025-10-03","url":"https://app.foursquare.com/v/detroit-metropolitan-wayne-county-airport-dtw/4700946bf964a520344b1fe3","shouts":["Halfway home"]},{"name":"Jersey Mike's Subs","count":19,"lat":33.473828,"lng":-84.441269,"city":"Other","first":"2010-04-02","last":"2023-09-30","url":"https://app.foursquare.com/v/jersey-mikes-subs/4b27cbe0f964a5201b8a24e3","shouts":[]},{"name":"Mills Park Soccer Field","count":19,"lat":35.811737,"lng":-78.895888,"city":"Raleigh / Triangle","first":"2017-08-05","last":"2023-02-18","url":"https://app.foursquare.com/v/mills-park-soccer-field/4ff37450e4b0fb4a81bd1b57","shouts":["The boy putting in the off-season training","Go Grey South"]},{"name":"Bad Daddy's Burger Bar","count":19,"lat":35.807833,"lng":-78.818872,"city":"Raleigh / Triangle","first":"2014-02-08","last":"2022-11-26","url":"https://app.foursquare.com/v/bad-daddys-burger-bar/529a59be11d2c01eeb1e870c","shouts":["Getting my burger on","Much needed date night!","Getting my burger on with @clikcapture @jweiss10 and @joshmcgee37"]},{"name":"Preston Soccer Fields","count":19,"lat":35.789156,"lng":-78.832864,"city":"Raleigh / Triangle","first":"2015-08-17","last":"2020-10-25","url":"https://app.foursquare.com/v/preston-soccer-fields/4bc7990b2f94d13acb3f127f","shouts":["3rd game today \ud83d\udcf8\u26bd\ufe0f","Go Dynamo!!!","Go Dynamo!","Day 1 of the #HungerChallenge is really taking its toll on my energy levels. About to trudge through soccer practice...","Go Strikers!"]},{"name":"Ruckus Pizza Pasta & Spirits","count":19,"lat":35.806792,"lng":-78.813446,"city":"Raleigh / Triangle","first":"2013-02-18","last":"2019-05-22","url":"https://app.foursquare.com/v/ruckus-pizza-pasta--spirits/4f270ad2e4b047657c45007a","shouts":["Team lunch. Go Revolution FC!","Rapids Team party!","End of the year @caslnc U8 Rapids party!","Yay date night!","Post-game grub"]},{"name":"Salsa Fresh Mexican Grill","count":19,"lat":35.819334,"lng":-78.847253,"city":"Raleigh / Triangle","first":"2010-04-22","last":"2019-05-04","url":"https://app.foursquare.com/v/salsa-fresh-mexican-grill/4b2ea5f1f964a5203fe424e3","shouts":[]},{"name":"Apple Crabtree Valley Mall","count":18,"lat":35.840417,"lng":-78.67952,"city":"Raleigh / Triangle","first":"2009-12-10","last":"2024-07-09","url":"https://app.foursquare.com/v/apple-crabtree-valley-mall/4ad4c00af964a52045ed20e3","shouts":[]},{"name":"The Pit Authentic Barbecue","count":18,"lat":35.775993,"lng":-78.644703,"city":"Raleigh / Triangle","first":"2009-10-22","last":"2024-04-30","url":"https://app.foursquare.com/v/the-pit-authentic-barbecue/4ad778eff964a520080b21e3","shouts":["Righteous!","Culinary tour of Raleigh continues for our Click 2014 activities...","Pre draft sustenance.","Happy place right now!","I'm so happy right now."]},{"name":"Tijuana Flats","count":18,"lat":35.844077,"lng":-78.888499,"city":"Raleigh / Triangle","first":"2014-05-17","last":"2024-04-28","url":"https://app.foursquare.com/v/tijuana-flats/5370dfd8498e31b9575e7976","shouts":["Getting my hot sauce on","It's preview day so our entire order was free!"]},{"name":"REI","count":18,"lat":35.903097,"lng":-78.936246,"city":"Raleigh / Triangle","first":"2011-10-15","last":"2024-02-19","url":"https://app.foursquare.com/v/rei/4a4685f5f964a52006a91fe3","shouts":[]},{"name":"Apple Southpoint","count":18,"lat":35.904967,"lng":-78.942969,"city":"Raleigh / Triangle","first":"2009-10-17","last":"2022-12-11","url":"https://app.foursquare.com/v/apple-southpoint/4ad7a8f3f964a520660d21e3","shouts":[]},{"name":"Lowe's","count":18,"lat":35.717123,"lng":-81.695008,"city":"Other","first":"2009-10-25","last":"2022-04-22","url":"https://app.foursquare.com/v/lowes/4addf9f6f964a520f86621e3","shouts":[]},{"name":"Brigs at the Park Restaurant","count":18,"lat":35.899321,"lng":-78.897585,"city":"Raleigh / Triangle","first":"2009-10-18","last":"2019-08-18","url":"https://app.foursquare.com/v/brigs-at-the-park-restaurant/4ae0a738f964a520518121e3","shouts":["Brekkie.","Breakfast!","Brigs Benedict time!","Brigs Benedict ftw!","Breakfast!"]},{"name":"Subway","count":18,"lat":38.845549,"lng":-76.883539,"city":"Other","first":"2010-01-10","last":"2019-07-19","url":"https://app.foursquare.com/v/subway/4b3e31a1f964a520659925e3","shouts":["He went to Jared.","Eat fresh!"]},{"name":"Qdoba Mexican Eats","count":18,"lat":35.74461,"lng":-78.872414,"city":"Raleigh / Triangle","first":"2009-12-09","last":"2017-06-17","url":"https://app.foursquare.com/v/qdoba-mexican-eats/4aec5cfaf964a52055c621e3","shouts":[]},{"name":"Tyler's Restaurant & Taproom","count":18,"lat":35.745536,"lng":-78.884774,"city":"Raleigh / Triangle","first":"2009-11-14","last":"2016-06-23","url":"https://app.foursquare.com/v/tylers-restaurant--taproom/4ae8ab06f964a52054b121e3","shouts":["Pre-movie noms","Pre-show dinner. Yay date night!"]},{"name":"Walmart Supercenter","count":18,"lat":35.866579,"lng":-78.846871,"city":"Raleigh / Triangle","first":"2009-12-19","last":"2013-07-23","url":"https://app.foursquare.com/v/walmart-supercenter/4ae0f2daf964a520f48321e3","shouts":["I hate everything about this place. But it has some items to review not found anywhere else.","Picking up some @freezerburns  review items.","Picking up food to review. New episodes of Freezerburns next week!","Yes! Found the ihop meals."]},{"name":"Heirloom","count":17,"lat":35.77713,"lng":-78.6457,"city":"Raleigh / Triangle","first":"2019-09-12","last":"2024-12-03","url":"https://app.foursquare.com/v/heirloom/5bb154144aa3f8002c5220bb","shouts":[]},{"name":"Hertz","count":17,"lat":33.640106,"lng":-84.46426,"city":"Atlanta","first":"2012-11-26","last":"2024-11-19","url":"https://app.foursquare.com/v/hertz/4ae1198af964a520378521e3","shouts":["Heading to DC in the morning."]},{"name":"Cafe Carolina and Bakery","count":17,"lat":35.78943,"lng":-78.662852,"city":"Raleigh / Triangle","first":"2011-12-21","last":"2024-08-02","url":"https://app.foursquare.com/v/cafe-carolina-and-bakery/4a59fef6f964a520a0b91fe3","shouts":["Lunch with Heather and my dad!","At weekly exec breakfast with @robbcz and @brooksbell","Time for our weekly exec breakfast."]},{"name":"Lenovo Center","count":17,"lat":35.802416,"lng":-78.723006,"city":"Raleigh / Triangle","first":"2009-12-12","last":"2024-07-12","url":"https://app.foursquare.com/v/lenovo-center/4b15504cf964a5204cb023e3","shouts":["Bon Jovi!","Go Bruins!","Speaking at #RaleighYPN this morning!","Our family's first Hurricane game!"]},{"name":"McDonald's","count":17,"lat":43.037626,"lng":-7.569078,"city":"Other","first":"2011-07-08","last":"2022-07-29","url":"https://app.foursquare.com/v/mcdonalds/4b5dc96ff964a520a76b29e3","shouts":["Bougie maccas","McTeacher Night to benefit the PTA","Reviewing the Rolo McFlurry."]},{"name":"Sweetwaters Coffee & Tea","count":17,"lat":35.830843,"lng":-78.908759,"city":"Raleigh / Triangle","first":"2019-05-23","last":"2020-12-31","url":"https://app.foursquare.com/v/sweetwaters-coffee--tea/5ce5e75fbb8d36002c30c87f","shouts":[]},{"name":"Washington Duke Inn & Golf Club","count":17,"lat":35.993317,"lng":-78.947311,"city":"Raleigh / Triangle","first":"2010-11-25","last":"2019-12-25","url":"https://app.foursquare.com/v/washington-duke-inn--golf-club/4ad4c008f964a520b4ec20e3","shouts":["A Family Christmas Tradition!","Getting my turkey on y'all.","Yay Christmas!","A Thanksgiving tradition. Bring on the carbs. Gobble gobble.","Our annual feast."]},{"name":"Buffalo Wings & Rings","count":17,"lat":35.821243,"lng":-78.846965,"city":"Raleigh / Triangle","first":"2010-07-25","last":"2016-11-26","url":"https://app.foursquare.com/v/buffalo-wings--rings/4b7ecc99f964a520620030e3","shouts":["Pre-game wing action. Go Patriots!","Post game refreshments"]},{"name":"The Rockford","count":17,"lat":35.784771,"lng":-78.647329,"city":"Raleigh / Triangle","first":"2011-12-01","last":"2015-09-17","url":"https://app.foursquare.com/v/the-rockford/4c28caa49fb5d13ae5179a57","shouts":["Love lunch with Heather!","Lunchtime with @brooksbell @robbcz @yamalytics","Is there anyone that doesn't like this place?","Word."]},{"name":"Firebirds Wood Fired Grill","count":16,"lat":35.808506,"lng":-78.818424,"city":"Raleigh / Triangle","first":"2009-12-27","last":"2025-06-18","url":"https://app.foursquare.com/v/firebirds-wood-fired-grill/4aecc2dbf964a52000cb21e3","shouts":["Celebrating Evelyn's birthday the best way possible!","Celebrating our anniversary with the kiddos.","Birthday celebration continues!","Final meal of the birthday weekend!","Behold the butt bread."]},{"name":"Bella Monica","count":16,"lat":35.825077,"lng":-78.706728,"city":"Raleigh / Triangle","first":"2009-12-28","last":"2025-04-04","url":"https://app.foursquare.com/v/bella-monica/4aeb42d0f964a52046c021e3","shouts":["My fave restaurant in Raleigh.","Of course we'll be at my fave restaurant in the Triangle for Valentines Day!","At my fave restaurant.","My fave restaurant in Raleigh."]},{"name":"Amberly Local","count":16,"lat":35.830784,"lng":-78.908632,"city":"Raleigh / Triangle","first":"2019-10-30","last":"2024-07-18","url":"https://app.foursquare.com/v/amberly-local/5daa267c5d8077000706f98a","shouts":[]},{"name":"Shiki Sushi","count":16,"lat":35.910219,"lng":-78.937666,"city":"Raleigh / Triangle","first":"2009-11-27","last":"2024-04-21","url":"https://app.foursquare.com/v/shiki-sushi/4ae1b5a0f964a520e28621e3","shouts":["Sushi date night with m'lady","Yay date night!","Yay date night!","Yay date night!"]},{"name":"Wake Competition Center","count":16,"lat":35.84207,"lng":-78.81812,"city":"Raleigh / Triangle","first":"2019-09-21","last":"2023-04-16","url":"https://app.foursquare.com/v/wake-competition-center/5d487c17f18a7300085e73d4","shouts":[]},{"name":"Jiffy Lube","count":16,"lat":35.89862,"lng":-78.897452,"city":"Raleigh / Triangle","first":"2010-01-02","last":"2022-07-24","url":"https://app.foursquare.com/v/jiffy-lube/4bec440f49430f47848207d2","shouts":["Inspection time."]},{"name":"Moe's Southwest Grill","count":16,"lat":35.833192,"lng":-78.881463,"city":"Raleigh / Triangle","first":"2009-10-24","last":"2020-03-06","url":"https://app.foursquare.com/v/moes-southwest-grill/4b1d8680f964a520b11124e3","shouts":["Team Registration for this weekend's tournament. Go Strikers!","Welcome to Moe's!!!","Welcome to Moes!"]},{"name":"The Q Shack","count":16,"lat":35.836734,"lng":-78.642641,"city":"Raleigh / Triangle","first":"2010-07-20","last":"2018-07-17","url":"https://app.foursquare.com/v/the-q-shack/4b03aebaf964a5200f5022e3","shouts":[]},{"name":"Mandalay Bay Resort and Casino","count":16,"lat":36.091648,"lng":-115.175365,"city":"Other","first":"2016-02-22","last":"2018-03-22","url":"https://app.foursquare.com/v/mandalay-bay-resort-and-casino/41326e00f964a52092141fe3","shouts":["#ibminterconnect time"]},{"name":"Uncle Maddio's Pizza","count":16,"lat":35.843776,"lng":-78.888256,"city":"Raleigh / Triangle","first":"2015-01-24","last":"2017-10-26","url":"https://app.foursquare.com/v/uncle-maddios-pizza/54c189b4498eea71db38b661","shouts":["Ciao Maddios! #addiction","New favorite","Free pizza until 4!"]},{"name":"Dos Taquitos Xoco","count":16,"lat":35.78568,"lng":-78.64749,"city":"Raleigh / Triangle","first":"2013-02-20","last":"2015-07-31","url":"https://app.foursquare.com/v/dos-taquitos-xoco/50cb9277e4b0c76967666426","shouts":["Team lunch!","First time here!"]},{"name":"Brier Creek Country Club","count":16,"lat":35.906934,"lng":-78.799473,"city":"Raleigh / Triangle","first":"2010-04-15","last":"2014-08-21","url":"https://app.foursquare.com/v/brier-creek-country-club/4b4d042ef964a520e1c726e3","shouts":["This place is packed!","Follow along today's #CMO panel at #triama","Here for the @triangleama training camp and monthly luncheon.","Here for the @triama Digital Marketing Training Camp"]},{"name":"Capstrat","count":16,"lat":35.798634,"lng":-78.728172,"city":"Raleigh / Triangle","first":"2010-08-24","last":"2013-05-23","url":"https://app.foursquare.com/v/capstrat/4ad87906f964a5209f1121e3","shouts":["At the @triangleama direct marketing SIG","At the @triangleama direct marketing SIG"]},{"name":"Clouds Brewing Raleigh","count":15,"lat":35.782563,"lng":-78.645794,"city":"Raleigh / Triangle","first":"2015-02-25","last":"2022-12-20","url":"https://app.foursquare.com/v/clouds-brewing-raleigh/53ffa072498ec5fabc06d18b","shouts":[]},{"name":"Renaissance Dental Center","count":15,"lat":35.83246,"lng":-78.633216,"city":"Raleigh / Triangle","first":"2010-05-03","last":"2020-08-18","url":"https://app.foursquare.com/v/renaissance-dental-center/4b4c8d0cf964a520dcb526e3","shouts":["Here with my wife who is getting her wisdom teeth out today."]},{"name":"Best Buy","count":15,"lat":35.915434,"lng":-78.784126,"city":"Raleigh / Triangle","first":"2009-11-15","last":"2020-01-05","url":"https://app.foursquare.com/v/best-buy/4b0065c9f964a520bb3d22e3","shouts":["Not even a \"better buy\" anymore."]},{"name":"Jordan Lake Rowing Club","count":15,"lat":35.74287,"lng":-79.008263,"city":"Raleigh / Triangle","first":"2018-04-07","last":"2019-10-05","url":"https://app.foursquare.com/v/jordan-lake-rowing-club/5ac8a9ea4a1cc0044eb251ea","shouts":["Go JLRC!!!","Early rainy morning for rowing!"]},{"name":"The Streets at Southpoint","count":15,"lat":35.903254,"lng":-78.941782,"city":"Raleigh / Triangle","first":"2009-10-17","last":"2018-05-17","url":"https://app.foursquare.com/v/the-streets-at-southpoint/4ad7a729f964a520480d21e3","shouts":["Entering the gates of hell..."]},{"name":"Tossed","count":15,"lat":35.835559,"lng":-78.857874,"city":"Raleigh / Triangle","first":"2010-04-04","last":"2014-05-18","url":"https://app.foursquare.com/v/tossed/4ae4cb92f964a520399e21e3","shouts":["Kids eat free ftw"]},{"name":"Sushi-Thai Raleigh","count":15,"lat":35.817157,"lng":-78.692247,"city":"Raleigh / Triangle","first":"2010-01-26","last":"2012-06-15","url":"https://app.foursquare.com/v/sushithai-raleigh/4aeb4471f964a5205dc021e3","shouts":[]},{"name":"EVO Entertainment Cary","count":14,"lat":35.849441,"lng":-78.889958,"city":"Raleigh / Triangle","first":"2024-03-03","last":"2025-12-27","url":"https://app.foursquare.com/v/evo-entertainment-cary/65e4a67e3a0a2f428900b3c9","shouts":[]},{"name":"Red Bowl Asian Bistro","count":14,"lat":35.791173,"lng":-78.849072,"city":"Raleigh / Triangle","first":"2009-12-30","last":"2025-08-26","url":"https://app.foursquare.com/v/red-bowl-asian-bistro/4b0c4aedf964a5209d3a23e3","shouts":["Sushi time","Birthday dinner requested by the boy."]},{"name":"Andia's Homemade Ice Cream","count":14,"lat":35.820331,"lng":-78.901166,"city":"Raleigh / Triangle","first":"2017-09-22","last":"2025-06-27","url":"https://app.foursquare.com/v/andias-homemade-ice-cream/59a35a59cad1b628d2ae9740","shouts":[]},{"name":"Another Broken Egg Cafe","count":14,"lat":27.389815,"lng":-82.445763,"city":"Tampa","first":"2013-12-20","last":"2022-05-13","url":"https://app.foursquare.com/v/another-broken-egg-cafe/4ffb5bd3ebca155bbea6c4a4","shouts":["Saturday school means brunch for mommy and daddy! Woot."]},{"name":"Gonza Tacos y Tequila","count":14,"lat":35.999906,"lng":-78.905526,"city":"Raleigh / Triangle","first":"2015-10-29","last":"2019-04-20","url":"https://app.foursquare.com/v/gonza-tacos-y-tequila/56315f8c498ebc7bc0a30d48","shouts":["Team lunch!"]},{"name":"Tobacco Road Sports Cafe","count":14,"lat":35.992433,"lng":-78.90341,"city":"Raleigh / Triangle","first":"2009-10-26","last":"2019-01-27","url":"https://app.foursquare.com/v/tobacco-road-sports-cafe/4aeb215ef964a520bfbe21e3","shouts":["Pre-DPAC dinner. Yay date night!"]},{"name":"Mr. Bones BBQ","count":14,"lat":27.489989,"lng":-82.706879,"city":"Tampa","first":"2010-09-04","last":"2018-12-28","url":"https://app.foursquare.com/v/mr-bones-bbq/4b4e5075f964a52019e926e3","shouts":["The Mayor hath arrived!","Boom!","The greatest ever!!!","Tradition continues.","So psyched."]},{"name":"SportHQ","count":14,"lat":35.736519,"lng":-78.796812,"city":"Raleigh / Triangle","first":"2012-03-07","last":"2015-04-11","url":"https://app.foursquare.com/v/sporthq/4e0cf82a483bc2b5f47367c4","shouts":["Brrrrrrrr! Go Rapids!","Go Rapids!","Go Rapids!","Finally we play U8 soccer. Go Rapids!","Last game of the season. Let's go Rapids!"]},{"name":"Kilwins Ice Cream - Chocolate - Fudge","count":13,"lat":35.791477,"lng":-78.848325,"city":"Raleigh / Triangle","first":"2009-12-31","last":"2025-08-31","url":"https://app.foursquare.com/v/kilwins-ice-cream--chocolate--fudge/4bbe08aa4e069c748e7b9fe3","shouts":[]},{"name":"Tanger Outlets Mebane","count":13,"lat":36.07531,"lng":-79.260496,"city":"Raleigh / Triangle","first":"2011-07-09","last":"2024-07-14","url":"https://app.foursquare.com/v/tanger-outlets-mebane/4cb300d9eb65b1f7b54180cd","shouts":["Getting my shopping on.","Shopping yo","Tax free weekend!"]},{"name":"Umstead Hotel Lobby Bar","count":13,"lat":35.830009,"lng":-78.765588,"city":"Raleigh / Triangle","first":"2014-05-08","last":"2024-03-14","url":"https://app.foursquare.com/v/umstead-hotel-lobby-bar/4e42b929b0fb7e4c1489c083","shouts":["Here early to get ready for #Click2014!"]},{"name":"Bryan Park Soccer Complex","count":13,"lat":36.166398,"lng":-79.743835,"city":"Other","first":"2019-02-09","last":"2024-02-25","url":"https://app.foursquare.com/v/bryan-park-soccer-complex/5c5f2a0e06fb60002cfd8c8a","shouts":[]},{"name":"Tropical Smoothie Cafe","count":13,"lat":36.78589,"lng":-76.108718,"city":"Other","first":"2009-10-30","last":"2023-03-11","url":"https://app.foursquare.com/v/tropical-smoothie-cafe/4ae87c09f964a520b8af21e3","shouts":[]},{"name":"Coquette Brasserie","count":13,"lat":35.838165,"lng":-78.642326,"city":"Raleigh / Triangle","first":"2009-12-16","last":"2022-02-17","url":"https://app.foursquare.com/v/coquette-brasserie/4b0b382bf964a520e12e23e3","shouts":[]},{"name":"Whole Foods Market","count":13,"lat":35.833986,"lng":-78.882541,"city":"Raleigh / Triangle","first":"2009-11-14","last":"2021-06-07","url":"https://app.foursquare.com/v/whole-foods-market/4aff02fff964a520f13222e3","shouts":["Picking up Christmas dinner for 12.","Restocking the @freezerburns freezer"]},{"name":"NCFC Southside Soccer Fields","count":13,"lat":35.695587,"lng":-78.906687,"city":"Raleigh / Triangle","first":"2013-03-09","last":"2020-10-04","url":"https://app.foursquare.com/v/ncfc-southside-soccer-fields/513b93e3e4b0c2f5aac1235c","shouts":["Go Strikers!","So excited to finally play. Go Strikers!","Game 3 of 5. Go Strikers!","Go Strikers!","Go Strikers!"]},{"name":"Mura Japanese Restaurant","count":13,"lat":35.836515,"lng":-78.643384,"city":"Raleigh / Triangle","first":"2013-10-03","last":"2019-09-06","url":"https://app.foursquare.com/v/mura-japanese-restaurant/4ae4f27af964a5209e9f21e3","shouts":["Yay date night!","Team lunch!","Celebrating @robbcz's birthday!","Here to celebrate @meremorgan1's 3rd anniversary at @brooksbellinc!","Sushi, yo."]},{"name":"Sawasdee Thai Restaurant","count":13,"lat":35.856892,"lng":-78.702121,"city":"Raleigh / Triangle","first":"2010-05-27","last":"2016-08-09","url":"https://app.foursquare.com/v/sawasdee-thai-restaurant/4bc474f6920eb713baba1e2c","shouts":[]},{"name":"The Flying Biscuit","count":12,"lat":35.789458,"lng":-78.659822,"city":"Raleigh / Triangle","first":"2009-11-28","last":"2022-11-01","url":"https://app.foursquare.com/v/the-flying-biscuit/4ad9c514f964a520b51a21e3","shouts":["Lunch with my girls!","Post-bowling biscuit action.","Exec breakfast this morning."]},{"name":"Unknown","count":12,"lat":44.333326,"lng":-68.188006,"city":"Other","first":"2009-11-14","last":"2021-07-25","url":"","shouts":["Ha ha! Nice location.","Wow. I just checked into the Triangle of Awesome! Cc @schneidermike"]},{"name":"Stellino's","count":12,"lat":35.848814,"lng":-78.889781,"city":"Raleigh / Triangle","first":"2017-09-24","last":"2020-04-17","url":"https://app.foursquare.com/v/stellinos/592b4f4731fd147e479112a7","shouts":[]},{"name":"Dickey's Barbecue Pit","count":12,"lat":35.847719,"lng":-78.889256,"city":"Raleigh / Triangle","first":"2010-08-22","last":"2020-02-15","url":"https://app.foursquare.com/v/dickeys-barbecue-pit/4ada3293f964a520d81f21e3","shouts":["Pre-@BrooksBell field trip BBQ"]},{"name":"Duke Urgent Care Morrisville","count":12,"lat":35.854856,"lng":-78.841834,"city":"Raleigh / Triangle","first":"2012-09-30","last":"2019-09-07","url":"https://app.foursquare.com/v/duke-urgent-care-morrisville/4bdb272863c5c9b6a7962668","shouts":["Hoping for good news..","After stubbornly ignoring my ankle injury for almost 2 weeks I find myself here.",":(","Here with my 7 year old. Worried its an ear infection"]},{"name":"CVS pharmacy","count":12,"lat":35.822201,"lng":-78.900459,"city":"Raleigh / Triangle","first":"2009-11-29","last":"2018-05-20","url":"https://app.foursquare.com/v/cvs-pharmacy/4cc61d653d7fa1cdeab1b55f","shouts":[]},{"name":"Jordan Lake State Recreation Area","count":12,"lat":35.743428,"lng":-79.007744,"city":"Raleigh / Triangle","first":"2018-01-26","last":"2018-05-12","url":"https://app.foursquare.com/v/jordan-lake-state-recreation-area/4b9d1052f964a520658c36e3","shouts":[]},{"name":"Residence Inn Louisville Downtown","count":12,"lat":38.254541,"lng":-85.745817,"city":"Other","first":"2017-08-02","last":"2017-09-28","url":"https://app.foursquare.com/v/residence-inn-louisville-downtown/4b970ecaf964a520e2f534e3","shouts":[]},{"name":"West Regional Library","count":12,"lat":35.814832,"lng":-78.864713,"city":"Raleigh / Triangle","first":"2010-03-30","last":"2015-05-08","url":"https://app.foursquare.com/v/west-regional-library/4c9b78d313de95219f15e053","shouts":[]},{"name":"Amante Gourmet Pizza","count":12,"lat":35.819577,"lng":-78.90121,"city":"Raleigh / Triangle","first":"2011-07-16","last":"2014-08-08","url":"https://app.foursquare.com/v/amante-gourmet-pizza/4e010c807d8beaa1649e794e","shouts":["Pizza night!","First time thx to Groupon."]},{"name":"Quiznos","count":12,"lat":35.826144,"lng":-78.706341,"city":"Raleigh / Triangle","first":"2010-06-29","last":"2011-11-30","url":"https://app.foursquare.com/v/quiznos/4bda1a303904a5939822459e","shouts":[]},{"name":"The Flying Biscuit Cafe - Brier Creek","count":11,"lat":35.902873,"lng":-78.800258,"city":"Raleigh / Triangle","first":"2023-01-23","last":"2025-12-20","url":"https://app.foursquare.com/v/the-flying-biscuit-cafe--brier-creek/6265511249224b06e5e6cd7c","shouts":[]},{"name":"Ting Park","count":11,"lat":35.669173,"lng":-78.838405,"city":"Raleigh / Triangle","first":"2019-09-29","last":"2025-09-14","url":"https://app.foursquare.com/v/ting-park/5b941c35de3bbf002c4ae83c","shouts":[]},{"name":"Nantucket Grill","count":11,"lat":35.920406,"lng":-78.929893,"city":"Raleigh / Triangle","first":"2011-03-19","last":"2025-06-19","url":"https://app.foursquare.com/v/nantucket-grill/4b81cc7cf964a520b0be30e3","shouts":["Dessert, yo.","And then there was dessert...","Only place I can get whole belly clams"]},{"name":"IKEA","count":11,"lat":39.917396,"lng":-75.14066,"city":"Philadelphia","first":"2011-04-16","last":"2024-05-09","url":"https://app.foursquare.com/v/ikea/4b100745f964a520b36723e3","shouts":["Word.","How do you say \"hell yes!\" In Swedish?"]},{"name":"The Carolina Inn","count":11,"lat":35.909744,"lng":-79.054522,"city":"Raleigh / Triangle","first":"2010-11-16","last":"2024-02-19","url":"https://app.foursquare.com/v/the-carolina-inn/4ad4c008f964a520c1ec20e3","shouts":["Day 2 at the Bell Leadership Institute","At the Bell Leadership Institute program"]},{"name":"Fairfield Inn & Suites","count":11,"lat":35.29593,"lng":-82.399117,"city":"Other","first":"2017-01-21","last":"2023-08-07","url":"https://app.foursquare.com/v/fairfield-inn--suites/4bc36a9adce4eee1a797719d","shouts":[]},{"name":"Morgan Street Food Hall","count":11,"lat":35.779509,"lng":-78.645656,"city":"Raleigh / Triangle","first":"2019-09-10","last":"2022-12-19","url":"https://app.foursquare.com/v/morgan-street-food-hall/5b7742b3018cbb002c524fa7","shouts":[]},{"name":"South of the Border","count":11,"lat":34.506133,"lng":-79.302384,"city":"Other","first":"2012-10-12","last":"2022-02-18","url":"https://app.foursquare.com/v/south-of-the-border/4b97f77bf964a520d82235e3","shouts":["Adding a cultural heritage stop to our road trip","I never sausage a place (since 3 days ago)!","Never sausage a place!","Ole."]},{"name":"Burger 21","count":11,"lat":35.793654,"lng":-78.846058,"city":"Raleigh / Triangle","first":"2017-06-03","last":"2019-12-23","url":"https://app.foursquare.com/v/burger-21/557600e3498ef37464a5a789","shouts":[]},{"name":"Hotel Meli\u00e1 Buenos Aires","count":11,"lat":-34.596954,"lng":-58.373019,"city":"Buenos Aires","first":"2018-06-11","last":"2018-11-07","url":"https://app.foursquare.com/v/hotel-meli%C3%A1-buenos-aires/4ba607e0f964a520532f39e3","shouts":[]},{"name":"Garner Centennial Park","count":11,"lat":35.668286,"lng":-78.602618,"city":"Raleigh / Triangle","first":"2011-05-14","last":"2016-04-17","url":"https://app.foursquare.com/v/garner-centennial-park/4bf0802ba09076b08bb629d4","shouts":["Go Rapids!","Go Strikers AND Rapids! Back to back games in Garner","Go Strikers!","First game of the season. Go Strikers!","Game 4 of 5. Go Rapids!"]},{"name":"BJ's Wholesale Club","count":11,"lat":35.901633,"lng":-78.787368,"city":"Raleigh / Triangle","first":"2009-11-15","last":"2014-07-04","url":"https://app.foursquare.com/v/bjs-wholesale-club/503e7e18f1baa13b4bd6386c","shouts":["Marking our spot for the fireworks!"]},{"name":"Durham Bulls Athletic Park","count":11,"lat":35.995048,"lng":-78.904322,"city":"Raleigh / Triangle","first":"2010-05-08","last":"2014-07-02","url":"https://app.foursquare.com/v/durham-bulls-athletic-park/4b155011f964a520cfaf23e3","shouts":["Here with 50+ of my neighbors!","Flat Stanley Stop 5"]},{"name":"Crabtree Tavern","count":11,"lat":35.836905,"lng":-78.680013,"city":"Raleigh / Triangle","first":"2010-01-15","last":"2010-11-30","url":"https://app.foursquare.com/v/crabtree-tavern/4b174cd9f964a520abc423e3","shouts":["Here setting up for the #TeamRDU party!"]},{"name":"AC Hotel Atlanta Buckhead at Phipps Plaza","count":10,"lat":33.853743,"lng":-84.359932,"city":"Atlanta","first":"2025-03-02","last":"2026-01-22","url":"https://app.foursquare.com/v/ac-hotel-atlanta-buckhead-at-phipps-plaza/570367b6cd1087f36a67b726","shouts":[]},{"name":"The Angus Barn","count":10,"lat":35.897942,"lng":-78.771836,"city":"Raleigh / Triangle","first":"2016-11-17","last":"2024-10-01","url":"https://app.foursquare.com/v/the-angus-barn/4ad4c009f964a520fbec20e3","shouts":["Getting ready to moderate a @pointsource Roundtable on digital transformation. P.S. Steak and chocolate chess pie!"]},{"name":"Cary High School","count":10,"lat":35.770568,"lng":-78.765384,"city":"Raleigh / Triangle","first":"2016-03-17","last":"2024-09-11","url":"https://app.foursquare.com/v/cary-high-school/4b82de58f964a520ece930e3","shouts":["Go PC!"]},{"name":"Rise Biscuits & Donuts","count":10,"lat":35.908446,"lng":-78.784568,"city":"Raleigh / Triangle","first":"2017-09-24","last":"2024-07-24","url":"https://app.foursquare.com/v/rise-biscuits--donuts/57540bcd498e9fd59a71f9bf","shouts":[]},{"name":"Hickory Tavern","count":10,"lat":35.848755,"lng":-78.890218,"city":"Raleigh / Triangle","first":"2016-08-07","last":"2024-06-21","url":"https://app.foursquare.com/v/hickory-tavern/57212f3b498efab84287af9d","shouts":[]},{"name":"La Farm Bakery","count":10,"lat":35.790619,"lng":-78.82719,"city":"Raleigh / Triangle","first":"2012-05-16","last":"2024-03-04","url":"https://app.foursquare.com/v/la-farm-bakery/4b4f1a3df964a5205bfa26e3","shouts":[]},{"name":"Ni Asian Kitchen","count":10,"lat":35.899783,"lng":-78.65272,"city":"Raleigh / Triangle","first":"2017-04-25","last":"2023-06-17","url":"https://app.foursquare.com/v/ni-asian-kitchen/55c2a768498e710ef86b867b","shouts":[]},{"name":"De Soto National Memorial","count":10,"lat":27.51889,"lng":-82.644718,"city":"Tampa","first":"2010-10-02","last":"2023-04-05","url":"https://app.foursquare.com/v/de-soto-national-memorial/4b93df5ef964a520895634e3","shouts":["Getting my National Park fix in!"]},{"name":"Carolina Ale House","count":10,"lat":35.051541,"lng":-80.767493,"city":"Other","first":"2012-02-01","last":"2023-02-04","url":"https://app.foursquare.com/v/carolina-ale-house/4b1c7613f964a520980724e3","shouts":["Pre-SMC drinks"]},{"name":"Just Tires","count":10,"lat":35.746491,"lng":-78.877671,"city":"Raleigh / Triangle","first":"2013-06-05","last":"2023-01-26","url":"https://app.foursquare.com/v/just-tires/4c43750edcd61b8dcc047a56","shouts":["An unplanned stop to spend $400. Grr."]},{"name":"Frankie's Fun Park","count":10,"lat":35.919248,"lng":-78.794793,"city":"Raleigh / Triangle","first":"2010-07-11","last":"2022-05-19","url":"https://app.foursquare.com/v/frankies-fun-park/4ae79822f964a520b6ac21e3","shouts":["Celebrating my birthday with go karts!!!","Epic birthday of fun continues!","Birthday party!","Company offsite ftw"]},{"name":"The Phoenician","count":10,"lat":33.50818,"lng":-111.949603,"city":"Other","first":"2014-10-28","last":"2022-05-05","url":"https://app.foursquare.com/v/the-phoenician/4b3ebf65f964a520aca125e3","shouts":[]},{"name":"Mills Park Middle School","count":10,"lat":35.812145,"lng":-78.896203,"city":"Raleigh / Triangle","first":"2013-05-30","last":"2019-06-06","url":"https://app.foursquare.com/v/mills-park-middle-school/4c6acf1396eaa593a0f320df","shouts":["Back to back games today. First up: Go Strikers!"]},{"name":"Michaels","count":10,"lat":35.909209,"lng":-78.782178,"city":"Raleigh / Triangle","first":"2009-10-18","last":"2018-07-22","url":"https://app.foursquare.com/v/michaels/4adb246ef964a520872421e3","shouts":[]},{"name":"B. Everett Jordan Lake","count":10,"lat":35.743428,"lng":-79.007744,"city":"Raleigh / Triangle","first":"2018-02-08","last":"2018-05-12","url":"https://app.foursquare.com/v/b-everett-jordan-lake/4b2ed5cdf964a52047e724e3","shouts":[]},{"name":"American Airlines Admirals Club","count":10,"lat":35.876626,"lng":-78.792071,"city":"Raleigh / Triangle","first":"2015-07-14","last":"2016-04-04","url":"https://app.foursquare.com/v/american-airlines-admirals-club/4b7569d4f964a5202d0b2ee3","shouts":["Ahh. A much needed shower before my final 2 flights home."]},{"name":"Citrix Systems, Inc.","count":10,"lat":35.779086,"lng":-78.646465,"city":"Raleigh / Triangle","first":"2010-02-11","last":"2015-09-08","url":"https://app.foursquare.com/v/citrix-systems-inc/4ad4e823f964a52098fc20e3","shouts":["Going to stalk @danlondon later."]},{"name":"518 West","count":10,"lat":35.783136,"lng":-78.647345,"city":"Raleigh / Triangle","first":"2012-05-21","last":"2014-10-09","url":"https://app.foursquare.com/v/518-west/4ad4c009f964a52012ed20e3","shouts":[]},{"name":"Bear Rock Cafe","count":10,"lat":35.804899,"lng":-78.812445,"city":"Raleigh / Triangle","first":"2009-11-20","last":"2012-08-18","url":"https://app.foursquare.com/v/bear-rock-cafe/4ad4c009f964a520d4ec20e3","shouts":[]},{"name":"North Carolina Museum of Art","count":9,"lat":35.811095,"lng":-78.702913,"city":"Raleigh / Triangle","first":"2014-05-07","last":"2025-08-15","url":"https://app.foursquare.com/v/north-carolina-museum-of-art/4b6abe28f964a52070de2be3","shouts":["Family hike today!","Spending the afternoon with my daughter! Evelyn","Excited for the #Click2014 opening reception!"]},{"name":"Raleigh Convention Center","count":9,"lat":35.7742,"lng":-78.641062,"city":"Raleigh / Triangle","first":"2009-11-04","last":"2025-06-18","url":"https://app.foursquare.com/v/raleigh-convention-center/4bc07c52920eb71363f5182c","shouts":["Flat Stanley Stop 1: Sir Walter Raleigh statue"]},{"name":"Import Motor Werks","count":9,"lat":35.758365,"lng":-78.817716,"city":"Raleigh / Triangle","first":"2019-12-23","last":"2024-09-03","url":"https://app.foursquare.com/v/import-motor-werks/4bc35b4cf8219c74b4f6b510","shouts":[]},{"name":"The Parlour","count":9,"lat":35.996654,"lng":-78.901835,"city":"Raleigh / Triangle","first":"2014-09-20","last":"2023-08-19","url":"https://app.foursquare.com/v/the-parlour/515cc981e4b0d533bbfbab35","shouts":["Never too cold for ice cream.","Vegan chocolate ice cream, yo.","Someone should review these ice cream places!"]},{"name":"Concierge Lounge","count":9,"lat":42.346709,"lng":-71.079487,"city":"Boston","first":"2014-07-13","last":"2023-07-25","url":"https://app.foursquare.com/v/concierge-lounge/50586487e4b0dcc7a75066e6","shouts":["Ballin!"]},{"name":"Weaver Street Market","count":9,"lat":35.778473,"lng":-78.645822,"city":"Raleigh / Triangle","first":"2021-07-07","last":"2022-11-16","url":"https://app.foursquare.com/v/weaver-street-market/5d7573ef996cbd0008f9071d","shouts":[]},{"name":"Char-Grill","count":9,"lat":35.780611,"lng":-78.648337,"city":"Raleigh / Triangle","first":"2009-10-23","last":"2022-11-01","url":"https://app.foursquare.com/v/chargrill/4adb880af964a520b22821e3","shouts":["I love Raleigh!"]},{"name":"Pei Wei Asian Diner","count":9,"lat":35.9115,"lng":-78.784745,"city":"Raleigh / Triangle","first":"2011-04-18","last":"2022-07-09","url":"https://app.foursquare.com/v/pei-wei-asian-diner/4af4b60ef964a52050f521e3","shouts":["Picking up dinner for m'lady"]},{"name":"Bank of America","count":9,"lat":35.789154,"lng":-78.663151,"city":"Raleigh / Triangle","first":"2011-03-29","last":"2019-10-07","url":"https://app.foursquare.com/v/bank-of-america/4b43b5bbf964a52035e725e3","shouts":[]},{"name":"Built","count":9,"lat":35.833359,"lng":-78.881899,"city":"Raleigh / Triangle","first":"2017-12-08","last":"2019-05-11","url":"https://app.foursquare.com/v/built/5cf58c11065ef5002ce4c34a","shouts":[]},{"name":"Zo\u00ebs Kitchen","count":9,"lat":35.807603,"lng":-78.814569,"city":"Raleigh / Triangle","first":"2009-12-02","last":"2018-04-24","url":"https://app.foursquare.com/v/zo%C3%ABs-kitchen/4b145503f964a5205aa123e3","shouts":["Love the Protein Power Plate!"]},{"name":"Bojangles' Famous Chicken 'n Biscuits","count":9,"lat":34.233414,"lng":-77.996111,"city":"Other","first":"2010-03-28","last":"2016-11-20","url":"https://app.foursquare.com/v/bojangles-famous-chicken-n-biscuits/4b2abcd4f964a52096ae24e3","shouts":["It's Bo time!","At Bojangles with @veemoe and @robbcz"]},{"name":"Salt Palace Convention Center","count":9,"lat":40.767043,"lng":-111.894904,"city":"Salt Lake City","first":"2012-03-21","last":"2015-03-12","url":"https://app.foursquare.com/v/salt-palace-convention-center/4ad4f292f964a52054fe20e3","shouts":[]},{"name":"Le M\u00e9ridien San Francisco","count":9,"lat":37.794197,"lng":-122.400083,"city":"San Francisco","first":"2014-07-29","last":"2014-08-28","url":"https://app.foursquare.com/v/le-m%C3%A9ridien-san-francisco/4acbca4bf964a520b1c720e3","shouts":[]},{"name":"Renaissance Asheville Hotel","count":9,"lat":35.602494,"lng":-82.555312,"city":"Other","first":"2011-06-22","last":"2011-06-26","url":"https://app.foursquare.com/v/renaissance-asheville-hotel/4babfd03f964a520f6db3ae3","shouts":["Made it safely and in good time! Psyched for #Typeacon"]},{"name":"California Pizza Kitchen","count":8,"lat":42.347349,"lng":-71.080004,"city":"Boston","first":"2009-11-28","last":"2025-08-04","url":"https://app.foursquare.com/v/california-pizza-kitchen/4af31773f964a52094ea21e3","shouts":[]},{"name":"Residence Inn Chicago Downtown/River North","count":8,"lat":41.889662,"lng":-87.629539,"city":"Chicago","first":"2015-06-03","last":"2025-07-29","url":"https://app.foursquare.com/v/residence-inn-chicago-downtownriver-north/4c6740dcb80abe9a62afcfe5","shouts":[]},{"name":"Eataly","count":8,"lat":41.892498,"lng":-87.626348,"city":"Chicago","first":"2016-11-16","last":"2025-07-06","url":"https://app.foursquare.com/v/eataly/528cdcfd11d2cbb79f3f6ae5","shouts":[]},{"name":"The Palazzo at The Venetian Resort","count":8,"lat":36.123696,"lng":-115.167531,"city":"Las Vegas","first":"2024-03-25","last":"2025-03-21","url":"https://app.foursquare.com/v/the-palazzo-at-the-venetian-resort/4a6d0478f964a52058d21fe3","shouts":[]},{"name":"The Centurion Lounge","count":8,"lat":38.852367,"lng":-77.042591,"city":"Washington DC","first":"2023-03-23","last":"2024-12-18","url":"https://app.foursquare.com/v/the-centurion-lounge/512cc602e889b0c80187e168","shouts":[]},{"name":"Ronald Reagan Washington National Airport (DCA)","count":8,"lat":38.85313,"lng":-77.042186,"city":"Washington DC","first":"2019-11-14","last":"2024-12-16","url":"https://app.foursquare.com/v/ronald-reagan-washington-national-airport-dca/44d17cecf964a5202b361fe3","shouts":[]},{"name":"Whiskey Kitchen","count":8,"lat":35.777694,"lng":-78.640519,"city":"Raleigh / Triangle","first":"2017-09-21","last":"2024-07-09","url":"https://app.foursquare.com/v/whiskey-kitchen/57a7bf38498ea30d9431bde1","shouts":[]},{"name":"Sushi at the Park","count":8,"lat":35.847972,"lng":-78.890339,"city":"Raleigh / Triangle","first":"2019-05-22","last":"2023-12-30","url":"https://app.foursquare.com/v/sushi-at-the-park/5c26bc6f826444002c6d81f4","shouts":[]},{"name":"Green Level High School","count":8,"lat":35.772429,"lng":-78.896938,"city":"Raleigh / Triangle","first":"2019-02-27","last":"2023-08-16","url":"https://app.foursquare.com/v/green-level-high-school/5991e68bd807ee5ed13a3f06","shouts":["Go PC!"]},{"name":"Hibernian Irish Pub & Restaurant","count":8,"lat":35.784701,"lng":-78.647368,"city":"Raleigh / Triangle","first":"2014-03-18","last":"2022-05-18","url":"https://app.foursquare.com/v/hibernian-irish-pub--restaurant/51302d4be4b06aa0931c42d9","shouts":["Lunch with my girl.","Love the new Hibernian!"]},{"name":"Sawmill Tap Room","count":8,"lat":35.885344,"lng":-78.66052,"city":"Raleigh / Triangle","first":"2011-06-14","last":"2019-07-15","url":"https://app.foursquare.com/v/sawmill-tap-room/4b43fec0f964a520cdef25e3","shouts":[]},{"name":"Robinson Preserve","count":8,"lat":27.496108,"lng":-82.669138,"city":"Tampa","first":"2012-01-14","last":"2018-12-31","url":"https://app.foursquare.com/v/robinson-preserve/4bdefcd2e75c0f47d281c903","shouts":["A nice walk with my honey.","Family walk time!","Scooter time"]},{"name":"Mellow Mushroom","count":8,"lat":34.943703,"lng":-80.978071,"city":"Other","first":"2011-12-01","last":"2018-04-14","url":"https://app.foursquare.com/v/mellow-mushroom/4e7e629e469086250aac8dc5","shouts":["Dad's visiting and kids out of school which means lunch with the family!","Lunch with the birthday girl! My little girl is 11 today!","Pre-game nomming"]},{"name":"The Cowfish Sushi Burger Bar","count":8,"lat":35.837446,"lng":-78.640403,"city":"Raleigh / Triangle","first":"2013-07-27","last":"2017-10-27","url":"https://app.foursquare.com/v/the-cowfish-sushi-burger-bar/512fae5be4b01e7458f3057a","shouts":["Celebrating @meremorgan1 's birthday with burger sushi epic-ness!"]},{"name":"CASL","count":8,"lat":35.849774,"lng":-78.612035,"city":"Raleigh / Triangle","first":"2013-02-25","last":"2017-03-28","url":"https://app.foursquare.com/v/casl/4c40a0dace54e21ec6d1091a","shouts":["Picking up uniforms. Go Rapids!"]},{"name":"Daniel Hotel & Spa (\u05de\u05dc\u05d5\u05df \u05d5\u05e1\u05e4\u05d0 \u05d3\u05e0\u05d9\u05d0\u05dc)","count":8,"lat":32.171219,"lng":34.800958,"city":"Other","first":"2017-01-07","last":"2017-01-12","url":"https://app.foursquare.com/v/daniel-hotel--spa-%D7%9E%D7%9C%D7%95%D7%9F-%D7%95%D7%A1%D7%A4%D7%90-%D7%93%D7%A0%D7%99%D7%90%D7%9C/4bbced1ca8cf76b01627b1fd","shouts":[]},{"name":"Cary Tennis Park","count":8,"lat":35.803532,"lng":-78.862242,"city":"Raleigh / Triangle","first":"2014-11-05","last":"2015-12-19","url":"https://app.foursquare.com/v/cary-tennis-park/4bb6962af562ef3b506f3097","shouts":["Cannot express how perfect today is for tennis.","Getting this in before we die of heat stroke."]},{"name":"Lime Fresh Grill","count":8,"lat":35.807788,"lng":-78.818955,"city":"Raleigh / Triangle","first":"2013-01-02","last":"2015-04-10","url":"https://app.foursquare.com/v/lime-fresh-grill/50759d28e4b04d62dd83c6f9","shouts":["First time here. Maybe I'll write a review...hmm"]},{"name":"Chubby's Tacos","count":8,"lat":35.817075,"lng":-78.692768,"city":"Raleigh / Triangle","first":"2010-05-03","last":"2014-11-18","url":"https://app.foursquare.com/v/chubbys-tacos/4aeb43def964a52052c021e3","shouts":[]},{"name":"North Carolina State Fairgrounds","count":8,"lat":35.799157,"lng":-78.720471,"city":"Raleigh / Triangle","first":"2009-10-22","last":"2013-10-27","url":"https://app.foursquare.com/v/north-carolina-state-fairgrounds/4ad4c009f964a520e5ec20e3","shouts":["Comforting myself from last nights loss with deep fried goodness","Flat Stanley Stop 3"]},{"name":"Thaiphoon Bistro","count":8,"lat":35.786529,"lng":-78.64867,"city":"Raleigh / Triangle","first":"2013-03-20","last":"2013-10-16","url":"https://app.foursquare.com/v/thaiphoon-bistro/4aee10ddf964a520c3d121e3","shouts":[]},{"name":"Spring Kitchen","count":8,"lat":35.819544,"lng":-78.90131,"city":"Raleigh / Triangle","first":"2009-12-06","last":"2013-07-26","url":"https://app.foursquare.com/v/spring-kitchen/4c7048e4b5a5236a24de4f52","shouts":[]},{"name":"Marbles Kids Museum","count":8,"lat":35.77889,"lng":-78.636735,"city":"Raleigh / Triangle","first":"2009-11-14","last":"2013-02-13","url":"https://app.foursquare.com/v/marbles-kids-museum/4aff00dbf964a520d43222e3","shouts":[]},{"name":"Caribou Coffee","count":8,"lat":38.905609,"lng":-77.031217,"city":"Washington DC","first":"2010-02-04","last":"2012-11-27","url":"https://app.foursquare.com/v/caribou-coffee/4ad72827f964a520d60821e3","shouts":[]},{"name":"Knight's Play Golf Center","count":8,"lat":35.712876,"lng":-78.811864,"city":"Raleigh / Triangle","first":"2010-08-27","last":"2011-08-07","url":"https://app.foursquare.com/v/knights-play-golf-center/4aea15d3f964a52037b921e3","shouts":["Yay!"]},{"name":"La Rancherita Mexican Restaurant","count":8,"lat":35.837916,"lng":-78.675105,"city":"Raleigh / Triangle","first":"2010-02-18","last":"2011-07-18","url":"https://app.foursquare.com/v/la-rancherita-mexican-restaurant/4b6727b6f964a520413e2be3","shouts":[]},{"name":"China Town","count":8,"lat":35.806257,"lng":-78.810149,"city":"Raleigh / Triangle","first":"2010-01-02","last":"2011-06-01","url":"https://app.foursquare.com/v/china-town/4b0b2711f964a520c12d23e3","shouts":[]},{"name":"Jasmin Mediterranean","count":7,"lat":35.814832,"lng":-78.820758,"city":"Raleigh / Triangle","first":"2022-07-10","last":"2026-03-15","url":"https://app.foursquare.com/v/jasmin-mediterranean/58a1f4e2110d0313499a2873","shouts":[]},{"name":"Jerry's Artarama","count":7,"lat":35.823512,"lng":-78.619938,"city":"Raleigh / Triangle","first":"2011-06-05","last":"2025-11-22","url":"https://app.foursquare.com/v/jerrys-artarama/4bb78f3253649c74c6df45fb","shouts":[]},{"name":"Chanticleer Cafe & Bakery","count":7,"lat":35.74396,"lng":-78.762074,"city":"Raleigh / Triangle","first":"2022-07-13","last":"2025-06-26","url":"https://app.foursquare.com/v/chanticleer-cafe--bakery/558ec59d498e065702ee256b","shouts":[]},{"name":"Primerica","count":7,"lat":33.985184,"lng":-84.097834,"city":"Other","first":"2016-03-16","last":"2025-04-15","url":"https://app.foursquare.com/v/primerica/4d2b25d18292236a3da431bb","shouts":[]},{"name":"Town Hall Burger & Beer","count":7,"lat":35.901382,"lng":-78.960981,"city":"Raleigh / Triangle","first":"2020-03-01","last":"2024-04-13","url":"https://app.foursquare.com/v/town-hall-burger--beer/51a4c825498e034cec28e6b2","shouts":[]},{"name":"Delano Las Vegas","count":7,"lat":36.091392,"lng":-115.176355,"city":"Other","first":"2018-01-09","last":"2024-03-20","url":"https://app.foursquare.com/v/delano-las-vegas/4daf213893a0096fbaaef003","shouts":[]},{"name":"Shake Shack","count":7,"lat":42.372272,"lng":-71.120867,"city":"Boston","first":"2017-04-12","last":"2023-10-22","url":"https://app.foursquare.com/v/shake-shack/54f36af0498e311c66692e3c","shouts":[]},{"name":"321 Coffee","count":7,"lat":35.784247,"lng":-78.65072,"city":"Raleigh / Triangle","first":"2022-10-04","last":"2023-08-29","url":"https://app.foursquare.com/v/321-coffee/62f53718ede410518d496b41","shouts":[]},{"name":"Hotel Groove Shinjuku","count":7,"lat":35.695405,"lng":139.700573,"city":"Other","first":"2023-07-02","last":"2023-07-06","url":"https://app.foursquare.com/v/hotel-groove-shinjuku/644491a7b2cfe929b11c54ac","shouts":[]},{"name":"SweetBerries","count":7,"lat":27.496183,"lng":-82.606324,"city":"Tampa","first":"2010-10-02","last":"2023-06-11","url":"https://app.foursquare.com/v/sweetberries/4b943f6af964a520057134e3","shouts":[]},{"name":"Baltimore/Washington International Thurgood Marshall Airport (BWI)","count":7,"lat":39.179991,"lng":-76.670957,"city":"Other","first":"2010-09-05","last":"2023-01-26","url":"https://app.foursquare.com/v/baltimorewashington-international-thurgood-marshall-airport-bwi/4a3b08fdf964a52086a01fe3","shouts":[]},{"name":"Seymour Athletic Park Playground","count":7,"lat":35.721069,"lng":-78.903631,"city":"Raleigh / Triangle","first":"2018-12-04","last":"2023-01-17","url":"https://app.foursquare.com/v/seymour-athletic-park-playground/5340655511d247b11bc03679","shouts":[]},{"name":"Autobell Car Wash","count":7,"lat":35.89346,"lng":-78.897408,"city":"Raleigh / Triangle","first":"2017-06-03","last":"2021-11-10","url":"https://app.foursquare.com/v/autobell-car-wash/4bec707049430f47f3b807d2","shouts":[]},{"name":"Jimmy John's","count":7,"lat":34.849154,"lng":-82.33009,"city":"Other","first":"2011-05-30","last":"2021-07-10","url":"https://app.foursquare.com/v/jimmy-johns/4b244871f964a520396524e3","shouts":[]},{"name":"Apex Back In Action","count":7,"lat":35.736239,"lng":-78.895153,"city":"Raleigh / Triangle","first":"2021-02-17","last":"2021-06-28","url":"https://app.foursquare.com/v/apex-back-in-action/602daace2158b46a9d8d45a6","shouts":[]},{"name":"Bad Daddy's","count":7,"lat":35.780732,"lng":-78.650542,"city":"Raleigh / Triangle","first":"2014-06-02","last":"2020-02-24","url":"https://app.foursquare.com/v/bad-daddys/50db6f68e4b02605deca0867","shouts":["Here with 5 newbies!","Getting my burger on"]},{"name":"Sheetz","count":7,"lat":35.855227,"lng":-78.795639,"city":"Raleigh / Triangle","first":"2009-11-17","last":"2019-12-19","url":"https://app.foursquare.com/v/sheetz/4b229508f964a520764924e3","shouts":["Everyone who waits here too before RDU pickup say \"yo\""]},{"name":"Ruby Tuesday","count":7,"lat":36.149697,"lng":-81.190852,"city":"Other","first":"2009-11-23","last":"2019-09-01","url":"https://app.foursquare.com/v/ruby-tuesday/4b6218d2f964a52037352ae3","shouts":[]},{"name":"Renaissance Chicago O'Hare Suites Hotel","count":7,"lat":41.983461,"lng":-87.840795,"city":"Chicago","first":"2019-07-16","last":"2019-07-18","url":"https://app.foursquare.com/v/renaissance-chicago-ohare-suites-hotel/4ad79e4df964a520de0c21e3","shouts":[]},{"name":"Piola","count":7,"lat":35.836675,"lng":-78.638114,"city":"Raleigh / Triangle","first":"2014-04-08","last":"2018-08-17","url":"https://app.foursquare.com/v/piola/4bed6a39e3562d7f9cf1fef8","shouts":[]},{"name":"Which Wich? Superior Sandwiches","count":7,"lat":35.905552,"lng":-78.784629,"city":"Raleigh / Triangle","first":"2010-03-31","last":"2018-04-15","url":"https://app.foursquare.com/v/which-wich-superior-sandwiches/4b1fe7f8f964a520962a24e3","shouts":[]},{"name":"Red Hot & Blue BBQ","count":7,"lat":35.8736,"lng":-78.623762,"city":"Raleigh / Triangle","first":"2017-01-27","last":"2018-02-02","url":"https://app.foursquare.com/v/red-hot--blue-bbq/4b6f209ef964a520dfde2ce3","shouts":[]},{"name":"P.F. Chang's China Bistro","count":7,"lat":35.905095,"lng":-78.937042,"city":"Raleigh / Triangle","first":"2010-02-16","last":"2017-10-01","url":"https://app.foursquare.com/v/pf-changs-china-bistro/4ae2387af964a520fc8b21e3","shouts":["Dinner date with Evelyn"]},{"name":"Comfort Suites","count":7,"lat":33.957576,"lng":-78.03021,"city":"Other","first":"2014-01-17","last":"2017-05-21","url":"https://app.foursquare.com/v/comfort-suites/4bc410b1dce4eee1a8e9719d","shouts":[]},{"name":"North Cary Park","count":7,"lat":35.820981,"lng":-78.788557,"city":"Raleigh / Triangle","first":"2010-04-17","last":"2017-03-19","url":"https://app.foursquare.com/v/north-cary-park/4b8159dff964a520f1a030e3","shouts":["Go Revolution FC!","Go Revolution FC!","Go Rapids!","Go Strikers!"]},{"name":"PTC","count":7,"lat":32.166746,"lng":34.813107,"city":"Other","first":"2016-08-01","last":"2017-01-11","url":"https://app.foursquare.com/v/ptc/4ae6f94cf964a520c8a721e3","shouts":[]},{"name":"The Grand America Hotel","count":7,"lat":40.75482,"lng":-111.888191,"city":"Salt Lake City","first":"2013-03-05","last":"2015-03-09","url":"https://app.foursquare.com/v/the-grand-america-hotel/4ad4f28ef964a52007fd20e3","shouts":["Ok this view from the 20th floor is pretty amazing!"]},{"name":"YoLo Dessert Cafe","count":7,"lat":35.819645,"lng":-78.901376,"city":"Raleigh / Triangle","first":"2011-09-04","last":"2014-09-13","url":"https://app.foursquare.com/v/yolo-dessert-cafe/4dd2fa5be4cd1b19130e6a27","shouts":["Never too cold for frozen desserts! I say without irony that its still like 70 degrees here in NC #thinningBlood","Red velvet cake flavor is awesome."]},{"name":"Boston Consulting Group","count":7,"lat":37.794756,"lng":-122.398463,"city":"San Francisco","first":"2014-07-30","last":"2014-08-28","url":"https://app.foursquare.com/v/boston-consulting-group/4c36314c18e72d7f496814f5","shouts":[]},{"name":"Cold Stone Creamery","count":7,"lat":35.746699,"lng":-78.884657,"city":"Raleigh / Triangle","first":"2010-05-09","last":"2014-07-23","url":"https://app.foursquare.com/v/cold-stone-creamery/4b5a76b5f964a520b4c628e3","shouts":[]},{"name":"Georginas Pizzeria-Restaurant","count":7,"lat":35.817533,"lng":-78.845378,"city":"Raleigh / Triangle","first":"2010-10-23","last":"2014-05-23","url":"https://app.foursquare.com/v/georginas-pizzeriarestaurant/4b53b2d1f964a52049a827e3","shouts":[]},{"name":"Party City","count":7,"lat":35.907285,"lng":-78.783783,"city":"Raleigh / Triangle","first":"2010-02-06","last":"2013-12-28","url":"https://app.foursquare.com/v/party-city/4ae624c6f964a5200aa521e3","shouts":[]},{"name":"Kanki Japanese House of Steaks and Sushi","count":7,"lat":35.840583,"lng":-78.679332,"city":"Raleigh / Triangle","first":"2010-01-02","last":"2012-12-17","url":"https://app.foursquare.com/v/kanki-japanese-house-of-steaks-and-sushi/4b0c6b00f964a520d33c23e3","shouts":[]},{"name":"Union Station Hotel Nashville, Autograph Collection","count":7,"lat":36.157458,"lng":-86.784401,"city":"Nashville","first":"2011-01-27","last":"2012-01-27","url":"https://app.foursquare.com/v/union-station-hotel-nashville-autograph-collection/4b058667f964a520796022e3","shouts":[]},{"name":"Brio Italian Grille","count":7,"lat":35.8393,"lng":-78.677714,"city":"Raleigh / Triangle","first":"2010-02-17","last":"2011-12-21","url":"https://app.foursquare.com/v/brio-italian-grille/4adf2d4bf964a5200a7821e3","shouts":[]},{"name":"Junior League of Raleigh Headquarters","count":7,"lat":35.780274,"lng":-78.650592,"city":"Raleigh / Triangle","first":"2011-06-30","last":"2011-12-09","url":"https://app.foursquare.com/v/junior-league-of-raleigh-headquarters/4be8970d947820a17d1cb5db","shouts":[]},{"name":"Sir Walter Coffee","count":6,"lat":35.775626,"lng":-78.636868,"city":"Raleigh / Triangle","first":"2019-12-09","last":"2026-02-11","url":"https://app.foursquare.com/v/sir-walter-coffee/58ded5eb5f6717406647d97e","shouts":[]},{"name":"Lights on the Neuse at Boyette Family Farms","count":6,"lat":35.67684,"lng":-78.424907,"city":"Raleigh / Triangle","first":"2013-12-24","last":"2025-12-24","url":"https://app.foursquare.com/v/lights-on-the-neuse-at-boyette-family-farms/52b9f917498e65711566cdeb","shouts":["An 8 year Christmas Eve Ng Family tradition!","A Ng Family Christmas Eve tradition 5 years and counting!"]},{"name":"CitizenM Boston Back Bay","count":6,"lat":42.351491,"lng":-71.089811,"city":"Boston","first":"2025-09-16","last":"2025-09-21","url":"https://app.foursquare.com/v/citizenm-boston-back-bay/66b78bf45392a633ee9d8623","shouts":[]},{"name":"Quality Inspection Center","count":6,"lat":35.758068,"lng":-78.778299,"city":"Raleigh / Triangle","first":"2020-08-18","last":"2025-08-28","url":"https://app.foursquare.com/v/quality-inspection-center/4beedb81d355a59391720b60","shouts":[]},{"name":"Thornton's Restaurant & Cafe","count":6,"lat":42.345311,"lng":-71.082226,"city":"Boston","first":"2023-09-23","last":"2025-08-03","url":"https://app.foursquare.com/v/thorntons-restaurant--cafe/4aec58d2f964a52035c621e3","shouts":[]},{"name":"Neomonde","count":6,"lat":35.809145,"lng":-78.815985,"city":"Raleigh / Triangle","first":"2011-08-05","last":"2024-09-22","url":"https://app.foursquare.com/v/neomonde/4b2e756df964a52082e024e3","shouts":[]},{"name":"The Barcelona EDITION","count":6,"lat":41.385909,"lng":2.177899,"city":"Barcelona","first":"2024-06-06","last":"2024-06-10","url":"https://app.foursquare.com/v/the-barcelona-edition/5b58d0226dcf04002cfa4c52","shouts":[]},{"name":"Citizens Kitchen & Bar","count":6,"lat":36.091544,"lng":-115.17643,"city":"Other","first":"2016-02-22","last":"2024-03-19","url":"https://app.foursquare.com/v/citizens-kitchen--bar/50e71072fe7019cee50178ae","shouts":[]},{"name":"Fount Coffee + Kitchen","count":6,"lat":35.85524,"lng":-78.841109,"city":"Raleigh / Triangle","first":"2019-04-24","last":"2023-11-27","url":"https://app.foursquare.com/v/fount-coffee--kitchen/5c054a2331fd14002cd1cbc2","shouts":[]},{"name":"Green Hope High School","count":6,"lat":35.804169,"lng":-78.866858,"city":"Raleigh / Triangle","first":"2017-03-18","last":"2023-10-11","url":"https://app.foursquare.com/v/green-hope-high-school/4b732bc4f964a520a59f2de3","shouts":["Checking out my niece in Tarzan!"]},{"name":"Hotel Granvia Kyoto (\u30db\u30c6\u30eb\u30b0\u30e9\u30f3\u30f4\u30a3\u30a2\u4eac\u90fd)","count":6,"lat":34.986664,"lng":135.759718,"city":"Other","first":"2023-07-09","last":"2023-07-13","url":"https://app.foursquare.com/v/%E3%83%9B%E3%83%86%E3%83%AB%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%B4%E3%82%A3%E3%82%A2%E4%BA%AC%E9%83%BD-hotel-granvia-kyoto/4b62cc04f964a52017532ae3","shouts":[]},{"name":"Bruegger's","count":6,"lat":35.124665,"lng":-80.708732,"city":"Other","first":"2009-10-16","last":"2021-04-17","url":"https://app.foursquare.com/v/brueggers/4ad89a48f964a520ba1221e3","shouts":[]},{"name":"A.C. Moore Arts & Crafts","count":6,"lat":35.743677,"lng":-78.872287,"city":"Raleigh / Triangle","first":"2011-04-10","last":"2019-04-29","url":"https://app.foursquare.com/v/ac-moore-arts--crafts/4c2680aa5c5ca593244f46fe","shouts":[]},{"name":"Oak Ridge Marina","count":6,"lat":36.03156,"lng":-84.19335,"city":"Other","first":"2019-04-26","last":"2019-04-28","url":"https://app.foursquare.com/v/oak-ridge-marina/4be230352ff376b060224fed","shouts":[]},{"name":"Gulf Drive Cafe","count":6,"lat":27.470551,"lng":-82.700586,"city":"Tampa","first":"2012-01-14","last":"2019-01-01","url":"https://app.foursquare.com/v/gulf-drive-cafe/4afc2e77f964a520592022e3","shouts":["Best breakfast place in the world?","Best breakfast on the island.","Under the tiki hut!"]},{"name":"The Ritz-Carlton, Grand Cayman","count":6,"lat":19.336444,"lng":-81.379614,"city":"Other","first":"2018-12-06","last":"2018-12-10","url":"https://app.foursquare.com/v/the-ritzcarlton-grand-cayman/4c745795c219224bd4a49f28","shouts":[]},{"name":"The Ritz-Carlton Club Lounge","count":6,"lat":19.336444,"lng":-81.379614,"city":"Other","first":"2018-12-06","last":"2018-12-10","url":"https://app.foursquare.com/v/the-ritzcarlton-club-lounge/4f7c5444e4b0f002b4aeefe7","shouts":[]},{"name":"Globant Laminar","count":6,"lat":-34.597001,"lng":-58.371509,"city":"Buenos Aires","first":"2018-06-11","last":"2018-11-08","url":"https://app.foursquare.com/v/globant-laminar/4b599788f964a520f68d28e3","shouts":[]},{"name":"World Market","count":6,"lat":35.904777,"lng":-78.935606,"city":"Raleigh / Triangle","first":"2013-07-28","last":"2018-07-28","url":"https://app.foursquare.com/v/world-market/4aecc5b8f964a52019cb21e3","shouts":[]},{"name":"SPG Club Lounge","count":6,"lat":41.887553,"lng":-87.620313,"city":"Chicago","first":"2018-03-31","last":"2018-05-10","url":"https://app.foursquare.com/v/spg-club-lounge/4d76bf911d7ab1f7da078ffb","shouts":[]},{"name":"Szechuan Heat","count":6,"lat":35.848864,"lng":-78.890378,"city":"Raleigh / Triangle","first":"2017-03-12","last":"2018-03-11","url":"https://app.foursquare.com/v/szechuan-heat/58c574e6f229950961f98e15","shouts":["Thank god that bad sushi place Nishiki is gone now."]},{"name":"Bellagio Hotel & Casino","count":6,"lat":36.110627,"lng":-115.174091,"city":"Las Vegas","first":"2014-12-16","last":"2018-01-10","url":"https://app.foursquare.com/v/bellagio-hotel--casino/41326e00f964a520c0131fe3","shouts":[]},{"name":"Caesars Palace Hotel & Casino","count":6,"lat":36.113396,"lng":-115.173721,"city":"Las Vegas","first":"2016-02-24","last":"2017-10-05","url":"https://app.foursquare.com/v/caesars-palace-hotel--casino/41326e00f964a520da131fe3","shouts":[]},{"name":"North Carolina Museum of History","count":6,"lat":35.781895,"lng":-78.638896,"city":"Raleigh / Triangle","first":"2012-12-15","last":"2016-01-10","url":"https://app.foursquare.com/v/north-carolina-museum-of-history/4ad4c009f964a520edec20e3","shouts":["Extreme Mammals!","Getting our history on!","Kicking off my day with the boys with the Rainforest Exhibit","Getting learned again"]},{"name":"Tasu Asian Bistro","count":6,"lat":35.900575,"lng":-78.791479,"city":"Raleigh / Triangle","first":"2011-07-23","last":"2015-12-28","url":"https://app.foursquare.com/v/tasu-asian-bistro/4bb610ccef159c74e85975f7","shouts":[]},{"name":"Elmo's Diner","count":6,"lat":36.010303,"lng":-78.922302,"city":"Raleigh / Triangle","first":"2010-03-27","last":"2015-11-28","url":"https://app.foursquare.com/v/elmos-diner/4ad9dc0af964a5205f1b21e3","shouts":["Big breakfast because clearly I didn't eat that much yesterday"]},{"name":"Blue Mango","count":6,"lat":35.78397,"lng":-78.646764,"city":"Raleigh / Triangle","first":"2015-02-23","last":"2015-10-13","url":"https://app.foursquare.com/v/blue-mango/4f11fa1de4b04b3f03eb9157","shouts":[]},{"name":"Crown Honda of Southpoint","count":6,"lat":35.907371,"lng":-78.95432,"city":"Raleigh / Triangle","first":"2009-11-12","last":"2015-01-08","url":"https://app.foursquare.com/v/crown-honda-of-southpoint/4afbf566f964a520551f22e3","shouts":["$600 more dollars later I got the car back and became mayor. Bittersweet.","Back again.","Car all fixed."]},{"name":"First Chinese Baptist Church","count":6,"lat":37.794305,"lng":-122.405394,"city":"San Francisco","first":"2011-10-16","last":"2014-04-20","url":"https://app.foursquare.com/v/first-chinese-baptist-church/4c0bcc2c340720a11f9a8893","shouts":["Visiting my dad with the @brooksbellinc team","Excited to worship and hear my dad preach. He is the Senior Pastor."]},{"name":"Adobe Summit","count":6,"lat":40.777067,"lng":-111.891381,"city":"Salt Lake City","first":"2013-03-05","last":"2014-03-26","url":"https://app.foursquare.com/v/adobe-summit/51344510e4b06bad5fb0d858","shouts":["Not sure why this isn't swarming yet."]},{"name":"Breakfast Room","count":6,"lat":41.909009,"lng":12.489602,"city":"Rome","first":"2014-02-18","last":"2014-02-23","url":"https://app.foursquare.com/v/breakfast-room/50e00abae4b0167bd74ad883","shouts":[]},{"name":"Grande Villas","count":6,"lat":34.685941,"lng":-76.890812,"city":"Other","first":"2013-07-11","last":"2013-07-14","url":"https://app.foursquare.com/v/grande-villas/4de3be5d45dd180ae564b188","shouts":["This place rules!"]},{"name":"TRIumph Gymnastics","count":6,"lat":35.784812,"lng":-78.87258,"city":"Raleigh / Triangle","first":"2010-12-12","last":"2013-06-15","url":"https://app.foursquare.com/v/triumph-gymnastics/4b9acb03f964a5202fd635e3","shouts":["Birthday party","Just bounce with me just bounce with me make the neck roll. Now freeze!"]},{"name":"The Breakers Resort","count":6,"lat":33.700049,"lng":-78.871021,"city":"Other","first":"2012-10-12","last":"2012-10-14","url":"https://app.foursquare.com/v/the-breakers-resort/4be1b5748dd062b5d97f3e3c","shouts":["Early start. Go Strikers!"]},{"name":"Snoopy's Hot Dogs & More","count":6,"lat":35.780775,"lng":-78.647789,"city":"Raleigh / Triangle","first":"2012-04-03","last":"2012-06-26","url":"https://app.foursquare.com/v/snoopys-hot-dogs--more/4bc920ad3740b713094a5e65","shouts":["$.99 hot dog day."]},{"name":"Lexie Lane Park","count":6,"lat":35.789181,"lng":-78.790848,"city":"Raleigh / Triangle","first":"2011-07-02","last":"2011-08-22","url":"https://app.foursquare.com/v/lexie-lane-park/4c23e3b3905a0f47f5e45e60","shouts":["Anyone know who Lexie Lane is? Cuz we are close to the strip club and it sounds like a stripper name."]},{"name":"Austin Convention Center","count":6,"lat":30.265119,"lng":-97.74023,"city":"Austin","first":"2010-03-11","last":"2010-03-15","url":"https://app.foursquare.com/v/austin-convention-center/440da323f964a52092301fe3","shouts":[]},{"name":"Courtyard Austin Downtown/Convention Center","count":6,"lat":30.265482,"lng":-97.740628,"city":"Austin","first":"2010-03-11","last":"2010-03-15","url":"https://app.foursquare.com/v/courtyard-austin-downtownconvention-center/47d14b4cf964a520134e1fe3","shouts":[]},{"name":"Pousada de Lisboa, Terreiro do Pa\u00e7o","count":5,"lat":38.708098,"lng":-9.137976,"city":"Lisbon","first":"2025-12-05","last":"2025-12-09","url":"https://app.foursquare.com/v/pousada-de-lisboa-terreiro-do-pa%C3%A7o/54ece198498e4126b9c5699c","shouts":[]},{"name":"Union Special","count":5,"lat":35.805566,"lng":-78.612994,"city":"Raleigh / Triangle","first":"2023-05-25","last":"2025-10-22","url":"https://app.foursquare.com/v/union-special/5d4ed24001092700081f77e0","shouts":[]},{"name":"La Pizza & La Pasta","count":5,"lat":42.347783,"lng":-71.082545,"city":"Boston","first":"2022-05-21","last":"2025-09-18","url":"https://app.foursquare.com/v/la-pizza--la-pasta/592b76f6d0a1495f69d7b1da","shouts":[]},{"name":"Caff\u00e8 Nero","count":5,"lat":42.347263,"lng":-71.076673,"city":"Boston","first":"2018-01-21","last":"2025-08-02","url":"https://app.foursquare.com/v/caff%C3%A8-nero/5a14857bc9f90761b1fca96f","shouts":[]},{"name":"SpringHill Suites Chicago Downtown/River North","count":5,"lat":41.889647,"lng":-87.629524,"city":"Chicago","first":"2025-07-28","last":"2025-07-30","url":"https://app.foursquare.com/v/springhill-suites-chicago-downtownriver-north/4adc76f7f964a520732c21e3","shouts":[]},{"name":"Cloud Gate","count":5,"lat":41.882694,"lng":-87.62295,"city":"Chicago","first":"2016-11-16","last":"2025-07-07","url":"https://app.foursquare.com/v/cloud-gate/4b0850dff964a520da0823e3","shouts":[]},{"name":"Taverna Agora","count":5,"lat":35.780689,"lng":-78.645013,"city":"Raleigh / Triangle","first":"2021-06-23","last":"2025-04-16","url":"https://app.foursquare.com/v/taverna-agora/5577a05f498e75efda31c6a9","shouts":[]},{"name":"White Windmill","count":5,"lat":33.978394,"lng":-84.097731,"city":"Other","first":"2024-03-13","last":"2025-04-15","url":"https://app.foursquare.com/v/white-windmill/5f087e097420543cf2b23136","shouts":[]},{"name":"Ritz Carlton","count":5,"lat":21.797198,"lng":-72.178227,"city":"Other","first":"2024-12-12","last":"2024-12-15","url":"https://app.foursquare.com/v/ritz-carlton/60c60d689700b41d5f6c525f","shouts":[]},{"name":"Lucky 32 Southern Kitchen","count":5,"lat":35.741729,"lng":-78.811482,"city":"Raleigh / Triangle","first":"2010-03-23","last":"2024-11-29","url":"https://app.foursquare.com/v/lucky-32-southern-kitchen/4aea2d03f964a52002ba21e3","shouts":[]},{"name":"Beasley's Chicken + Honey","count":5,"lat":35.777574,"lng":-78.640314,"city":"Raleigh / Triangle","first":"2012-05-07","last":"2024-05-02","url":"https://app.foursquare.com/v/beasleys-chicken--honey/4e091acc1f6e21103396e069","shouts":["Yay date night!","Food hopping."]},{"name":"Fairfield Inn & Suites Austin South","count":5,"lat":30.258451,"lng":-97.737954,"city":"Austin","first":"2024-03-06","last":"2024-03-08","url":"https://app.foursquare.com/v/fairfield-inn--suites-austin-south/4c3676b718e72d7f8df114f5","shouts":[]},{"name":"Taco Bell","count":5,"lat":36.062532,"lng":-79.606257,"city":"Other","first":"2010-07-18","last":"2024-02-24","url":"https://app.foursquare.com/v/taco-bell/4b8b3280f964a5201e9732e3","shouts":["I've been to some pretty bad TBells in my life. This ranks at the bottom. (But the ppl were super nice)"]},{"name":"United Club","count":5,"lat":40.698349,"lng":-74.179401,"city":"New York","first":"2013-05-20","last":"2024-02-14","url":"https://app.foursquare.com/v/united-club/4bbdd0a8a0a0c9b6cc001c0f","shouts":[]},{"name":"Sassool","count":5,"lat":35.898741,"lng":-78.657495,"city":"Raleigh / Triangle","first":"2016-08-11","last":"2023-12-29","url":"https://app.foursquare.com/v/sassool/4ef3a298f9ab42ef2e810c36","shouts":[]},{"name":"Waffle House","count":5,"lat":35.910067,"lng":-78.933258,"city":"Raleigh / Triangle","first":"2022-08-19","last":"2023-12-27","url":"https://app.foursquare.com/v/waffle-house/4ada8052f964a5201b2321e3","shouts":[]},{"name":"Delta SkyClub","count":5,"lat":33.434337,"lng":-112.011125,"city":"Other","first":"2019-10-01","last":"2023-09-21","url":"https://app.foursquare.com/v/delta-skyclub/5c3743016eda02002c22500e","shouts":[]},{"name":"Rental Car Center","count":5,"lat":27.96423,"lng":-82.535169,"city":"Other","first":"2011-10-07","last":"2023-06-11","url":"https://app.foursquare.com/v/rental-car-center/4c32c07d7cc0c9b695d3f09a","shouts":[]},{"name":"Lake Wheeler Park","count":5,"lat":35.694551,"lng":-78.699419,"city":"Raleigh / Triangle","first":"2021-09-25","last":"2023-04-13","url":"https://app.foursquare.com/v/lake-wheeler-park/4babe101f964a52090d13ae3","shouts":[]},{"name":"The Venetian Resort Las Vegas","count":5,"lat":36.121948,"lng":-115.170253,"city":"Las Vegas","first":"2018-01-09","last":"2023-03-22","url":"https://app.foursquare.com/v/the-venetian-resort-las-vegas/41326e00f964a52038151fe3","shouts":[]},{"name":"Tupelo Honey","count":5,"lat":35.790068,"lng":-78.662974,"city":"Raleigh / Triangle","first":"2015-08-04","last":"2022-12-04","url":"https://app.foursquare.com/v/tupelo-honey/54412b91498eb9ec64f71c2f","shouts":[]},{"name":"East Chapel Hill High School","count":5,"lat":35.960539,"lng":-79.027068,"city":"Raleigh / Triangle","first":"2017-12-09","last":"2022-08-17","url":"https://app.foursquare.com/v/east-chapel-hill-high-school/4b780a61f964a5202ab32ee3","shouts":["Dropping the boy off for the ACT"]},{"name":"Yard House","count":5,"lat":42.347198,"lng":-71.079609,"city":"Boston","first":"2016-04-12","last":"2022-05-22","url":"https://app.foursquare.com/v/yard-house/506f1db1582fd12fac56503f","shouts":[]},{"name":"Fairfield Inn & Suites Sarasota Lakewood Ranch","count":5,"lat":27.390563,"lng":-82.44652,"city":"Tampa","first":"2022-05-13","last":"2022-05-15","url":"https://app.foursquare.com/v/fairfield-inn--suites-sarasota-lakewood-ranch/4bbf84c3abf4952157c7bd93","shouts":[]},{"name":"Intercity Hotel","count":5,"lat":47.499389,"lng":19.08144,"city":"Other","first":"2022-03-17","last":"2022-03-19","url":"https://app.foursquare.com/v/intercity-hotel/61201b7a4901776b4263384f","shouts":[]},{"name":"Novotel Krakow Centrum","count":5,"lat":50.054901,"lng":19.926164,"city":"Other","first":"2022-03-15","last":"2022-03-17","url":"https://app.foursquare.com/v/novotel-krakow-centrum/4bcc5b86aeaaeee1b5ec3d6d","shouts":[]},{"name":"Duck Donuts","count":5,"lat":36.163271,"lng":-75.753425,"city":"Other","first":"2015-12-28","last":"2021-11-27","url":"https://app.foursquare.com/v/duck-donuts/4bb33a7b715eef3b930986bb","shouts":[]},{"name":"Paris Charles de Gaulle Airport (CDG) (A\u00e9roport Paris-Charles de Gaulle)","count":5,"lat":49.023517,"lng":2.525341,"city":"Other","first":"2013-09-21","last":"2021-10-22","url":"https://app.foursquare.com/v/a%C3%A9roport-parischarles-de-gaulle-cdg/4ab474c6f964a520387120e3","shouts":["1 leg down. 2 to go!"]}];
+const YEAR_COUNTS = {"2026":128,"2025":570,"2024":881,"2023":728,"2022":748,"2021":317,"2020":338,"2019":952,"2018":1052,"2017":879,"2016":779,"2015":775,"2014":1464,"2013":1326,"2012":1142,"2011":990,"2010":697,"2009":235};
+const CITY_TOTALS = {"Raleigh / Triangle":4708,"Other":1122,"Philadelphia":255,"Tampa":195,"Boston":153,"San Francisco":106,"Chicago":97,"Atlanta":58,"New York":58,"Washington DC":44,"Charleston":44,"Austin":43,"Salt Lake City":40,"Las Vegas":35,"Rome":30,"Nashville":26,"Buenos Aires":21,"Providence":20,"Seattle":17,"Barcelona":10};
+
+const MAX_COUNT = VENUES[0].count;
+let activeListFilter = 'all';
+let mapFilter = 'all';
+let mapVenues = [];
+
+// ── INIT ──
+function init() {
+  document.getElementById('stat-venues').textContent = VENUES.length.toLocaleString();
+  const cities = new Set(VENUES.map(v => v.city).filter(c => c !== 'Other'));
+  document.getElementById('stat-cities').textContent = cities.size;
+  buildList();
+  buildYearChart();
+  buildCityChart();
+  buildCitySelect();
+  updateCityList();
+  setTimeout(buildMap, 50);
+}
+
+// ── MOST VISITED LIST ──
+function buildList() {
+  const list = document.getElementById('venue-list');
+  list.innerHTML = '';
+  VENUES.forEach((v, i) => {
+    const rank = i + 1;
+    const pct = Math.round((v.count / MAX_COUNT) * 100);
+    const years = getSpanYears(v.first, v.last);
+    const row = document.createElement('div');
+    row.className = 'venue-row' + (v.shouts.length > 0 ? ' has-shout' : '');
+    row.dataset.rank = rank;
+    row.dataset.city = v.city;
+    row.dataset.count = v.count;
+    row.onclick = () => openDetail(v);
+    row.innerHTML = `
+      <div class="venue-rank ${rank <= 10 ? 'top10' : ''}">${rank}</div>
+      <div class="venue-info">
+        <div class="venue-name">${esc(v.name)}</div>
+        <div class="venue-meta">
+          <span class="venue-city">${v.city}</span>
+          <span class="venue-dates">${fmtYear(v.first)}${v.first !== v.last ? '–' + fmtYear(v.last) : ''}</span>
+        </div>
+      </div>
+      <div class="venue-right">
+        <div class="visit-badge">${v.count}</div>
+        <div class="visit-label">visits</div>
+        <div class="visit-bar-wrap"><div class="visit-bar" style="width:${pct}%"></div></div>
+      </div>`;
+    list.appendChild(row);
+  });
+  filterMost();
+}
+
+function setFilter(f) {
+  activeListFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('fbtn-' + f).classList.add('active');
+  filterMost();
+}
+
+function filterMost() {
+  const q = document.getElementById('search-most').value.toLowerCase().trim();
+  let visible = 0;
+  document.querySelectorAll('#venue-list .venue-row').forEach(row => {
+    const name = row.querySelector('.venue-name').textContent.toLowerCase();
+    const city = row.dataset.city;
+    const count = parseInt(row.dataset.count);
+    let show = true;
+    if (q && !name.includes(q)) show = false;
+    if (activeListFilter === 'raleigh' && !city.includes('Raleigh')) show = false;
+    if (activeListFilter === 'travel' && city.includes('Raleigh')) show = false;
+    if (activeListFilter === 'repeat' && count < 10) show = false;
+    row.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  document.getElementById('most-count').textContent = visible + ' venue' + (visible !== 1 ? 's' : '');
+  document.getElementById('most-empty').style.display = visible === 0 ? 'block' : 'none';
+}
+
+// ── YEAR CHART ──
+function buildYearChart() {
+  const el = document.getElementById('year-chart');
+  const max = Math.max(...Object.values(YEAR_COUNTS));
+  const years = Object.keys(YEAR_COUNTS).sort();
+  years.forEach(y => {
+    const val = YEAR_COUNTS[y];
+    const pct = Math.round((val / max) * 100);
+    const div = document.createElement('div');
+    div.className = 'bar-row';
+    div.innerHTML = `
+      <div class="bar-label">${y}</div>
+      <div class="bar-track"><div class="bar-fill accent" style="width:${pct}%"></div></div>
+      <div class="bar-value">${val.toLocaleString()}</div>`;
+    el.appendChild(div);
+  });
+
+  // Eras
+  const eras = [
+    { label: 'Peak Era', years: '2012–2014', note: '3,932 check-ins across 3 years — your most active Swarm period', color: 'var(--accent)' },
+    { label: 'Pandemic Dip', years: '2020–2021', note: '655 total — lowest two-year stretch in your history', color: 'var(--muted)' },
+    { label: 'Recent Run', years: '2022–2024', note: '2,357 check-ins — strong comeback, near pre-pandemic pace', color: 'var(--teal)' },
+    { label: 'Simmer Era', years: '2025–now', note: 'Simmer Coffee House already your 13th most-checked-in venue', color: 'var(--red)' },
+  ];
+  const eraEl = document.getElementById('era-list');
+  eras.forEach(e => {
+    const div = document.createElement('div');
+    div.style.cssText = 'background:var(--surface);border:1px solid var(--border);border-left:3px solid ' + e.color + ';border-radius:0 6px 6px 0;padding:14px 16px;';
+    div.innerHTML = `<div style="font-weight:500;color:var(--text);font-size:14px;margin-bottom:4px;">${e.label} <span style="color:var(--muted);font-size:12px;font-weight:300;margin-left:8px;">${e.years}</span></div><div style="font-size:13px;color:var(--text2);">${e.note}</div>`;
+    eraEl.appendChild(div);
+  });
+}
+
+// ── CITY CHART ──
+function buildCityChart() {
+  const el = document.getElementById('city-chart');
+  const entries = Object.entries(CITY_TOTALS).filter(([c]) => c !== 'Other').sort((a,b) => b[1]-a[1]);
+  const max = entries[0][1];
+  entries.forEach(([city, count]) => {
+    const pct = Math.round((count / max) * 100);
+    const div = document.createElement('div');
+    div.className = 'bar-row';
+    const isHome = city.includes('Raleigh');
+    div.innerHTML = `
+      <div class="bar-label" title="${city}">${city.replace(' / Triangle','')}</div>
+      <div class="bar-track"><div class="bar-fill ${isHome ? 'accent' : 'teal'}" style="width:${pct}%"></div></div>
+      <div class="bar-value">${count.toLocaleString()}</div>`;
+    el.appendChild(div);
+  });
+}
+
+function buildCitySelect() {
+  const sel = document.getElementById('city-select');
+  const cities = [...new Set(VENUES.map(v => v.city))].sort((a,b) => {
+    const ca = CITY_TOTALS[a] || 0, cb = CITY_TOTALS[b] || 0;
+    return cb - ca;
+  });
+  cities.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c;
+    opt.textContent = c;
+    sel.appendChild(opt);
+  });
+}
+
+function updateCityList() {
+  const city = document.getElementById('city-select').value;
+  document.getElementById('city-list-title').textContent = 'Top Venues in ' + city;
+  const filtered = VENUES.filter(v => v.city === city).slice(0, 40);
+  const list = document.getElementById('city-venue-list');
+  list.innerHTML = '';
+  const cityMax = filtered[0]?.count || 1;
+  filtered.forEach((v, i) => {
+    const pct = Math.round((v.count / cityMax) * 100);
+    const row = document.createElement('div');
+    row.className = 'venue-row';
+    row.onclick = () => openDetail(v);
+    row.innerHTML = `
+      <div class="venue-rank ${i < 10 ? 'top10' : ''}">${i+1}</div>
+      <div class="venue-info">
+        <div class="venue-name">${esc(v.name)}</div>
+        <div class="venue-meta">
+          <span class="venue-dates">${fmtYear(v.first)}${v.first !== v.last ? '–' + fmtYear(v.last) : ''}</span>
+        </div>
+      </div>
+      <div class="venue-right">
+        <div class="visit-badge">${v.count}</div>
+        <div class="visit-label">visits</div>
+        <div class="visit-bar-wrap"><div class="visit-bar" style="width:${pct}%"></div></div>
+      </div>`;
+    list.appendChild(row);
+  });
+}
+
+// ── MAP ──
+function buildMap() {
+  const canvas = document.getElementById('map-canvas');
+  const container = document.getElementById('map-container');
+  canvas.width = container.offsetWidth * window.devicePixelRatio;
+  canvas.height = container.offsetHeight * window.devicePixelRatio;
+  canvas.style.width = container.offsetWidth + 'px';
+  canvas.style.height = container.offsetHeight + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  const W = container.offsetWidth, H = container.offsetHeight;
+
+  // Determine bounds based on filter
+  let venues = VENUES.filter(v => v.lat && v.lng);
+  let minLat, maxLat, minLng, maxLng;
+
+  if (mapFilter === 'raleigh') {
+    minLat = 35.55; maxLat = 36.15; minLng = -79.1; maxLng = -78.3;
+    venues = venues.filter(v => v.lat > 35.5 && v.lat < 36.3 && v.lng > -79.5 && v.lng < -78.3);
+  } else if (mapFilter === 'us') {
+    minLat = 24; maxLat = 50; minLng = -125; maxLng = -65;
+    venues = venues.filter(v => v.lat > 24 && v.lat < 50 && v.lng > -125 && v.lng < -65);
+  } else if (mapFilter === 'intl') {
+    venues = venues.filter(v => !(v.lat > 24 && v.lat < 50 && v.lng > -125 && v.lng < -65));
+    minLat = Math.min(...venues.map(v=>v.lat)) - 2;
+    maxLat = Math.max(...venues.map(v=>v.lat)) + 2;
+    minLng = Math.min(...venues.map(v=>v.lng)) - 2;
+    maxLng = Math.max(...venues.map(v=>v.lng)) + 2;
+  } else if (mapFilter === 'pizza') {
+    const kw = ['pizza','pizzeria','brixx','stromboli','mellow mushroom','italian','trattoria','osteria','pasta','ristorante','cucina','brio'];
+    venues = venues.filter(v => kw.some(k => v.name.toLowerCase().includes(k)));
+    minLat = Math.min(...venues.map(v=>v.lat)) - 1;
+    maxLat = Math.max(...venues.map(v=>v.lat)) + 1;
+    minLng = Math.min(...venues.map(v=>v.lng)) - 1;
+    maxLng = Math.max(...venues.map(v=>v.lng)) + 1;
+  } else if (mapFilter === 'sushi') {
+    const kw = ['sushi','sake bar','dumpling','noodle','japanese','ramen','hibachi','thai','pho','asian','wok','teriyaki','tempura','udon','korean','chinese','dim sum','szechuan','vietnamese','taiwanese','mongolian','p.f. chang','benihana','wasabi','bento','izakaya'];
+    venues = venues.filter(v => kw.some(k => v.name.toLowerCase().includes(k)));
+    minLat = Math.min(...venues.map(v=>v.lat)) - 1;
+    maxLat = Math.max(...venues.map(v=>v.lat)) + 1;
+    minLng = Math.min(...venues.map(v=>v.lng)) - 1;
+    maxLng = Math.max(...venues.map(v=>v.lng)) + 1;
+  } else if (mapFilter === 'burgers') {
+    const kw = ['burger','five guys','red robin','shake shack','mcdonald','sean\'s shack','cowfish','smashburger','tavern','pub ','grill & bar','grille','gastropub','ale house','brewpub','brew pub','sports bar','buffalo wild','buffalo wings','yard house','hooters'];
+    venues = venues.filter(v => kw.some(k => v.name.toLowerCase().includes(k)));
+    minLat = Math.min(...venues.map(v=>v.lat)) - 1;
+    maxLat = Math.max(...venues.map(v=>v.lat)) + 1;
+    minLng = Math.min(...venues.map(v=>v.lng)) - 1;
+    maxLng = Math.max(...venues.map(v=>v.lng)) + 1;
+  } else {
+    minLat = Math.min(...venues.map(v=>v.lat)) - 2;
+    maxLat = Math.max(...venues.map(v=>v.lat)) + 2;
+    minLng = Math.min(...venues.map(v=>v.lng)) - 2;
+    maxLng = Math.max(...venues.map(v=>v.lng)) + 2;
+  }
+
+  const padding = 40;
+  function project(lat, lng) {
+    const x = padding + (lng - minLng) / (maxLng - minLng) * (W - 2*padding);
+    const y = padding + (1 - (lat - minLat) / (maxLat - minLat)) * (H - 2*padding);
+    return [x, y];
+  }
+
+  // Background
+  ctx.fillStyle = '#13120f';
+  ctx.fillRect(0, 0, W, H);
+
+  // Draw grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 6; i++) {
+    const y = padding + (H - 2*padding) * i / 6;
+    ctx.beginPath(); ctx.moveTo(padding, y); ctx.lineTo(W-padding, y); ctx.stroke();
+    const x = padding + (W - 2*padding) * i / 6;
+    ctx.beginPath(); ctx.moveTo(x, padding); ctx.lineTo(x, H-padding); ctx.stroke();
+  }
+
+  // Sort so small bubbles draw on top
+  const sorted = [...venues].sort((a,b) => b.count - a.count);
+  const maxC = sorted[0]?.count || 1;
+
+  mapVenues = sorted.map(v => {
+    const [x, y] = project(v.lat, v.lng);
+    const r = 4 + Math.sqrt(v.count / maxC) * 22;
+    return { ...v, x, y, r };
+  });
+
+  mapVenues.forEach(v => {
+    const alpha = 0.15 + (v.count / maxC) * 0.55;
+    let color;
+    if (v.count >= 30) color = '#5DCAA5';
+    else if (v.count >= 10) color = '#e8a840';
+    else color = '#c8a96e';
+
+    // Glow
+    const grd = ctx.createRadialGradient(v.x, v.y, 0, v.x, v.y, v.r * 2.5);
+    grd.addColorStop(0, color.replace('#', 'rgba(') + ',0.12)'.replace('rgba(','rgba(').replace('#',''));
+    // simpler glow
+    ctx.beginPath();
+    ctx.arc(v.x, v.y, v.r * 2, 0, Math.PI*2);
+    ctx.fillStyle = hexToRgba(color, 0.06);
+    ctx.fill();
+
+    // Bubble
+    ctx.beginPath();
+    ctx.arc(v.x, v.y, v.r, 0, Math.PI*2);
+    ctx.fillStyle = hexToRgba(color, alpha);
+    ctx.fill();
+    ctx.strokeStyle = hexToRgba(color, 0.5);
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Label for big ones
+    if (v.count >= 30 || (mapFilter === 'raleigh' && v.count >= 10)) {
+      ctx.fillStyle = 'rgba(232,228,220,0.9)';
+      ctx.font = 'bold ' + Math.max(9, Math.min(13, v.r * 0.7)) + 'px DM Sans';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const label = v.name.length > 14 ? v.name.slice(0,13)+'…' : v.name;
+      ctx.fillText(label, v.x, v.y + v.r + 10);
+    }
+  });
+
+  // Hover / click
+  canvas.onclick = function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left);
+    const my = (e.clientY - rect.top);
+    for (const v of mapVenues) {
+      const dx = mx - v.x, dy = my - v.y;
+      if (dx*dx + dy*dy <= v.r*v.r) {
+        openDetail(v);
+        return;
+      }
+    }
+  };
+
+  canvas.onmousemove = function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left);
+    const my = (e.clientY - rect.top);
+    let hit = false;
+    for (const v of mapVenues) {
+      const dx = mx - v.x, dy = my - v.y;
+      if (dx*dx + dy*dy <= v.r*v.r) { hit = true; break; }
+    }
+    canvas.style.cursor = hit ? 'pointer' : 'default';
+  };
+}
+
+function setMapFilter(f) {
+  mapFilter = f;
+  document.querySelectorAll('.map-filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mfbtn-' + f).classList.add('active');
+  buildMap();
+}
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ── TABS ──
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    const tabs = ['map','history','cities','most'];
+    b.classList.toggle('active', tabs[i] === name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'map') setTimeout(buildMap, 50);
+}
+
+// ── DETAIL OVERLAY ──
+function openDetail(v) {
+  document.getElementById('dp-name').textContent = v.name;
+  document.getElementById('dp-city').textContent = v.city;
+  document.getElementById('dp-visits').textContent = v.count;
+  document.getElementById('dp-first').textContent = fmtDate(v.first);
+  document.getElementById('dp-last').textContent = fmtDate(v.last);
+  document.getElementById('dp-link').href = v.url || '#';
+  const shouts = v.shouts || [];
+  const shoutSec = document.getElementById('dp-shouts-section');
+  const shoutEl = document.getElementById('dp-shouts');
+  if (shouts.length > 0) {
+    shoutSec.style.display = 'block';
+    shoutEl.innerHTML = shouts.map(s => `<div class="shout-item">"${esc(s)}"</div>`).join('');
+  } else {
+    shoutSec.style.display = 'none';
+  }
+  document.getElementById('detail-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+
+// ── HELPERS ──
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtYear(d) { return d ? d.slice(0,4) : '—'; }
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y,m] = d.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[parseInt(m)-1] + ' ' + y;
+}
+function getSpanYears(first, last) {
+  if (!first || !last) return '';
+  const f = parseInt(first.slice(0,4)), l = parseInt(last.slice(0,4));
+  return f === l ? f : f + '–' + l;
+}
+
+init();
+</script>
+</body>
+</html>
