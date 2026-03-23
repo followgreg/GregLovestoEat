@@ -835,6 +835,7 @@ function updateCityList() {
 
 // ── MAP ──
 function buildMap() {
+  try {
   const canvas = document.getElementById('map-canvas');
   const container = document.getElementById('map-container');
   const W = container.offsetWidth, H = container.offsetHeight;
@@ -986,6 +987,11 @@ function buildMap() {
     }
     canvas.style.cursor = hit ? 'pointer' : 'default';
   };
+  } catch(e) {
+    document.getElementById('map-loading').style.display = 'flex';
+    document.getElementById('map-loading').textContent = 'Map error: ' + e.message;
+    console.error('buildMap error:', e);
+  }
 }
 
 function setMapFilter(f) {
